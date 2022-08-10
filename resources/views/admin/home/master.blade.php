@@ -521,17 +521,22 @@
             </li>
           </ul>
         </div>
+        
         <ul class="navbar-nav navbar-right">
-          <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle='dropdown'><i class="fa fa-user fa-1x" aria-hidden="true"></i> Account</button>
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#">HTML</a></li>
-              <li><a href="#">CSS</a></li>
-              <li><a href="#">JavaScript</a></li>
-            </ul>
-          </div>
+          <div class="dropdown mx-2">
+            <a href="#" data-toggle="dropdown" class="btn btn-primary dropdown-toggle"><i class="fas fa-cog mx-1"></i>Account</a>
+            <div class="dropdown-menu w-100 ">
+               <a href="#" class="dropdown-item has-icon"><i class="fas fa-user"></i>Profile</a>
+               <form action="{{route('signout')}}" method="GET">
+                <button style="font-size: 12px" class="dropdown-item has-icon"><i class="fas fa-door-open mt-2"></i>Sign Out</button>
+               </form>
+               
+            </div>
+         </div>
          
+        </ul>
+        <ul style="visibility: hidden">
+          <li></li>
         </ul>
       </nav>
       <div class="main-sidebar sidebar-style-2" tabindex="1" style="overflow: hidden; outline: none;">
@@ -753,15 +758,15 @@
     </div>
   </div>
   <!-- General JS Scripts -->
-  <script src="assets/js/app.min.js"></script>
+  <script src="{{asset('theme/assets/js/app.min.js')}}"></script>
   <!-- JS Libraies -->
-  <script src="assets/bundles/apexcharts/apexcharts.min.js"></script>
+  <script src="{{asset('theme/assets/bundles/apexcharts/apexcharts.min.js')}}"></script>
   <!-- Page Specific JS File -->
-  <script src="assets/js/page/index.js"></script>
+  <script src="{{asset('theme/assets/js/page/index.js')}}"></script>
   <!-- Template JS File -->
-  <script src="assets/js/scripts.js"></script>
+  <script src="{{asset('theme/assets/js/scripts.js')}}"></script>
   <!-- Custom JS File -->
-  <script src="assets/js/custom.js"></script>
+  <script src="{{asset('theme/assets/js/custom.js')}}"></script>
 
 
 

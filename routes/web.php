@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::get('admin_signout',[AdminController::class, 'signOut'])->name('signout');
+
 
 Route::group(['middleware' => ['guest:admin']], function() {
 
@@ -36,9 +37,15 @@ Route::group(['middleware' => ['guest:admin']], function() {
 
     Route::group(['middleware' => ['auth:admin']], function() {
       // define your route, route groups here
+
           //Dashboard
           Route::get('dashboard',[AdminController::class, 'dashboard'])->name('dashboard');
-          Route::get('/', function () {
-            return redirect()->route('dashboard');
-        });
+          Route::get('/', function () {return redirect()->route('dashboard');});
+
+          //SignOut
+          Route::get('admin_signout',[AdminController::class, 'signOut'])->name('signout');
+
+          //Products
+          Route::get('add_product',[ProductController::class, 'create'])->name('add_product');
+
    });
