@@ -46,7 +46,7 @@ class AdminController extends Controller
             {
 
                 //redirect to Dashboard
-                return redirect()->intended('admin/dashboard')->with('success', 'Signed in');
+                return redirect()->intended('dashboard')->with('success', 'Signed in');
                 
             }
       

@@ -47,5 +47,7 @@ Route::group(['middleware' => ['guest:admin']], function() {
 
           //Products
           Route::get('add_product',[ProductController::class, 'create'])->name('add_product');
+          Route::post('save_product',[ProductController::class, 'createProduct'])->name('save_product');
+          Route::get('view_products',[ProductController::class, 'viewProducts'])->name('view_products');
 
    });
