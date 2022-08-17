@@ -23,10 +23,11 @@
         </div>
         <div class="card-body px-4">
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
                 <tbody>
-                        <tr>
-                    
+                       
+                          <tr class="border border-dark">
+                      
                             <th>Product Name</th>
                             <th>Short Decription</th>
                             <th>Long Decription</th>
@@ -38,18 +39,35 @@
 
                         @foreach ($p_details as $products)
 
-                            <tr>
+                            <tr class="border-bottom border-dark">
                             
                                 <td>{{$products->name}}</td>
                                 <td>{{$products->s_description}}</td>
                                 <td>{{$products->l_description}}</td>
-                                <td class="align-center"><img class="img-fluid" src="{{ url('images/'.$products->image_src) }}"></td>
+                                <td class="align-center"><img class="img-fluid" src="{{asset('images').'/'.$products->image_src}}"></td>
                                 <td>{{$products->category}}</td>
                                 <td>{{$products->quantity}}</td>
                                 <td>{{$products->price}}</td>
+
+                                <td>
+                                  <form action="{{ route('delete_product', $products->id)}}" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                  </form>
+                                  
+                                </td>
+                                  <td>
+                                    <form action="{{route('edit_product', $products->id)}}" method="GET">
+                                      @csrf
+                                      @method('get')
+                                      <button class="btn btn-success" type="submit">Edit</button>
+                                    </form>
+                                  </td>
                             </tr>
                             
                         @endforeach
+                       
                 </tbody>
             </table>
             

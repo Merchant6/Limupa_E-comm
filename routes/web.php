@@ -50,4 +50,13 @@ Route::group(['middleware' => ['guest:admin']], function() {
           Route::post('save_product',[ProductController::class, 'createProduct'])->name('save_product');
           Route::get('view_products',[ProductController::class, 'viewProducts'])->name('view_products');
 
+           //Edit Product
+          Route::get('edit_product/{id?}',[ProductController::class, 'edit'])->name('edit_product');
+
+           //Update Product Data
+          Route::post('update_product/{id}',[ProductController::class, 'update'])->name('update_product');
+
+          //Delete Product
+          Route::delete('/delete_product/{id}',[ProductController::class, 'destroy'])->name('delete_product');
+
    });
