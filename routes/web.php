@@ -59,4 +59,7 @@ Route::group(['middleware' => ['guest:admin']], function() {
           //Delete Product
           Route::delete('/delete_product/{id}',[ProductController::class, 'destroy'])->name('delete_product');
 
+          //Search Product
+          Route::get('search',[ProductController::class, 'search'])->name('search');
+
    });

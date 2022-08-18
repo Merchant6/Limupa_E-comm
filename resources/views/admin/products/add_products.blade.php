@@ -14,7 +14,7 @@
               <div class="col-8 col-md-8 col-lg-8">
                <form action="{{route('save_product')}}" enctype="multipart/form-data" method="POST">
                 @csrf
-                
+                @method('POST')
                 <div class="card">
                   <div class="card-header">
                     <h4>Add Product</h4>

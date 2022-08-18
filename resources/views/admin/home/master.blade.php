@@ -3,6 +3,10 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>Otika - Admin</title>
+
+  <!-- Jquery File -->
+  <script src="{{asset('theme/assets/js/jquery.min.js')}}"></script>
+
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{asset('theme/assets/css/app.min.css')}}">
   <link rel="stylesheet" href="{{asset('theme/assets/bundles/bootstrap-social/bootstrap-social.css')}}">
@@ -12,6 +16,8 @@
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{asset('theme/assets/css/custom.css')}}">
   <link rel='shortcut icon' type='image/x-icon' href='{{asset('theme/assets/img/favicon.ico')}}' />
+
+ 
 </head>
 
 <style type="text/css">.apexcharts-canvas {
@@ -509,16 +515,7 @@
             <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-maximize"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
               </a></li>
-            <li>
-              <form class="form-inline mr-auto">
-                <div class="search-element">
-                  <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="200" style="width: 200px;">
-                  <button class="btn" type="submit">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
-              </form>
-            </li>
+            
           </ul>
         </div>
         
@@ -551,10 +548,10 @@
               <a href="index.html" class="nav-link toggled"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg><span>Dashboard</span></a>
             </li>
             <li class="dropdown">
-              <a href="#" class="menu-toggle nav-link has-dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>Widgets</span></a>
+              <a href="#" class="menu-toggle nav-link has-dropdown"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>Products</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="widget-chart.html">Chart Widgets</a></li>
-                <li><a class="nav-link" href="widget-data.html">Data Widgets</a></li>
+                <li><a class="nav-link" href="{{route('add_product')}}">Add Products</a></li>
+                <li><a class="nav-link" href="{{route('view_products')}}">View Products</a></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -757,6 +754,10 @@
       </footer>
     </div>
   </div>
+
+
+ 
+  
   <!-- General JS Scripts -->
   <script src="{{asset('theme/assets/js/app.min.js')}}"></script>
   <!-- JS Libraies -->
@@ -767,7 +768,12 @@
   <script src="{{asset('theme/assets/js/scripts.js')}}"></script>
   <!-- Custom JS File -->
   <script src="{{asset('theme/assets/js/custom.js')}}"></script>
+  
 
+
+   
+ 
+  
 
 
 <!-- index.html  21 Nov 2019 03:47:04 GMT -->

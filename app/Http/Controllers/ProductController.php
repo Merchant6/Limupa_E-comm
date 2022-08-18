@@ -4,10 +4,49 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Products;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 
 class ProductController extends Controller
 {
+
+
+    //Search Products
+    public function search(Request $request)
+    {
+        $products = Products::where('name','like', '%'.$request->search.'%')
+                    ->orWhere('id','like', '%'.$request->search.'%')->get();
+
+        $output = "";
+        foreach($products as $products)
+        {
+            $output.=
+            '<tr class="border-bottom border-dark p-3">
+                <td>'.$products->name.'</td>
+                <td>'.$products->s_description.'</td>
+                <td>'.$products->l_description.'</td>
+                <td class="align-center p-5"><img class="img-fluid" src='.asset('images')."/".$products->image_src.'></td>
+                <td>'.$products->category.'</td>
+                <td>'.$products->quantity.'</td>
+                <td>'.$products->price.'</td>
+                <td>'.'
+                    <form action="/delete_product/'.$products->id.'" method="POST">
+                    <input type="hidden" value='.csrf_token().'>
+                    <input type="hidden" name="_method" value="delete">
+                    <button class="btn btn-danger" type="submit">'.'Delete</button>
+                    </form>
+                    '.'
+                </td>
+               
+             </tr>
+            ';
+        }
+
+        return response($output);
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -96,7 +135,7 @@ class ProductController extends Controller
 
         ]);
 
-        return redirect()->to('view_products')->with(['success','Product added successfully']);
+        return redirect()->to('view_products')->with('success','Product added successfully');
           
     }
 
@@ -142,7 +181,17 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $products = Products::findOrFail($id);
-        $products->delete();
+        
+        $destinationPath = base_path("/public/images").'/'.$products->image_src;
+        if(File::exists($destinationPath))
+        {
+
+            File::delete($destinationPath); //for deleting only file try this
+            $products->delete(); //for deleting record and file try both
+    
+        }
+
+        // $products->delete();
 
         return redirect('view_products')->with('error', 'Product successfully deleted');
     }
