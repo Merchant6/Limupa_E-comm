@@ -92,6 +92,7 @@ class AdminController extends Controller
             
             
             
+            
             public function signOut() 
             {
                 Session::flush();

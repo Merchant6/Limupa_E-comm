@@ -12,7 +12,7 @@
 
             
               <div class="col-8 col-md-8 col-lg-8">
-               <form action="{{route('save_product')}}" enctype="multipart/form-data" method="POST">
+               <form id="addForm" enctype="multipart/form-data" method="POST">
                 @csrf
                 @method('POST')
                 <div class="card">
@@ -20,15 +20,18 @@
                     <h4>Add Product</h4>
                   </div>
                   <div class="card-body">
+
+                    @if($errors->any())
+                      <div id="error" class="error">
+                          <!-- Display errors here -->
+                      </div>
+                    @endif
+
                     <div class="form-group">
                       <label>Product Name</label>
                       <input name="name" type="text" class="form-control">
                       
-                      <div class="error">
-                        @if ($errors->has('name'))
-                          <span class="text-danger">{{ $errors->first('name') }}</span>
-                        @endif
-                      </div>
+                      
 
                     </div>
                     <div class="form-group">
@@ -39,9 +42,7 @@
                         <input name="s_description" type="text" class="form-control phone-number">
                       </div>
                       <div class="s_description">
-                        @if ($errors->has('name'))
-                          <span class="text-danger">{{ $errors->first('s_description') }}</span>
-                        @endif
+                       
                       </div>
                     </div>
                     <div class="form-group">
@@ -52,11 +53,7 @@
                         <input name="l_description" type="text" class="form-control pwstrength" data-indicator="pwindicator">
                         
                       </div>
-                      <div class="error">
-                        @if ($errors->has('l_description'))
-                          <span class="text-danger">{{ $errors->first('l_description') }}</span>
-                        @endif
-                      </div>
+                      
                       <div id="pwindicator" class="pwindicator">
                         <div class="bar"></div>
                         <div class="label"></div>
@@ -84,11 +81,7 @@
                           Computers
                         </label>
                       </div>
-                      <div class="error my-2">
-                        @if ($errors->has('category'))
-                          <span class="text-danger">{{ $errors->first('category') }}</span>
-                        @endif
-                    </div>
+                      
   
   
                     <div class="form-group">
@@ -96,37 +89,25 @@
                       <span class="text-success">* Image format should be JPG, JPEG, or PNG</span><br>
                       <div class="input-group">
                       
-                        <input name="image_src" type="file" class="form-control currency">
+                        <input id="image_src" name="image_src" type="file" class="form-control currency">
                         
                       </div>
-                      <div class="error">
-                        @if ($errors->has('image_src'))
-                          <span class="text-danger">{{ $errors->first('image_src') }}</span>
-                        @endif
-                      </div>
+                      
                     </div>
                    
                     <div class="form-group">
                       <label>Quantity</label><br>
                       <span class="text-success">* Value should be greater than 0</span><br>
                       <input name="quantity" type="number" class="form-control invoice-input" min="1" oninput="validity.valid||(value='');">
-                      <div class="error">
-                        @if ($errors->has('quantity'))
-                          <span class="text-danger">{{ $errors->first('quantity') }}</span>
-                        @endif
-                      </div> 
+                      
                     </div>  
                     <div class="form-group">
                       <label>Price</label><br>
                       <span class="text-success">* Value should be greater than 0</span><br>
                       <input name="price" type="number" class="form-control invoice-input" min="1" oninput="validity.valid||(value='');">
-                      <div class="error mb-2">
-                        @if ($errors->has('price'))
-                          <span class="text-danger">{{ $errors->first('price') }}</span>
-                        @endif
-                    </div>
+                      
                    
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                   </div>
                 </div>
 
@@ -146,7 +127,51 @@
         </div>
       </div>
    
+      <script>
+          // var formData = new FormData(document.getElementById('addForm'));
+          $(document).ready(function()
+      {
+            $("#addForm").submit(function(event)
+            {
+                // Stop form from submitting normally
+                event.preventDefault();
+                
+                /* Serialize the submitted form control values to be sent to the web server with the request */
+                var formData = new FormData();
+                
+                var totalfiles = document.getElementById('image_src').files.length;
+                
+                for (var x = 0; x < totalfiles; x++) 
+                {
+                    formData.append("docs[]", document.getElementById('docs').files[x]);
+                }
+                
+                $.ajax(
+                {
+                  url: "/save_product/",
+                  type: "POST",
+                  processData:false,
+                  contentType:false,
+                  cache:false,
+                  data: formData,
+                  // success: function (data, textStatus, errorThrown) 
+                  // {
+                  //   console.log(data,textStatus);
+                  //   $(".error").html('<div class="alert btn-danger"><strong>Success!</strong>&nbsp;'+data.msg+'</div>')
+                  //   $(".error").show().delay(10000).fadeOut();
+                  // },
+                  error: function(jqXHR, textStatus, errorThrown) 
+                  {
+                    console.log(textStatus, jqXHR.responseJSON);
+                    $("#error").html('<div class="alert btn-danger"><strong>Error!</strong>&nbsp;'+jqXHR.responseJSON.msg+'</div>')
+                    $("#error").show().delay(10000).fadeOut();
+                  }
+                });
+            });
+        });
 
+
+       </script>
 
 
 @endsection

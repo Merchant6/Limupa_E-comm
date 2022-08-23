@@ -30,8 +30,8 @@ class ProductController extends Controller
                 <td>'.$products->quantity.'</td>
                 <td>'.$products->price.'</td>
                 <td>'.'
-                    <form action="/delete_product/'.$products->id.'" method="POST">
-                    <input type="hidden" value='.csrf_token().'>
+                    <form action='.route('delete_product', $products->id).' method="POST" id="deleteBtn">
+                    <input type="hidden" name="_token" value='.csrf_token().'>
                     <input type="hidden" name="_method" value="delete">
                     <button class="btn btn-danger" type="submit">'.'Delete</button>
                     </form>
@@ -84,6 +84,16 @@ class ProductController extends Controller
                 'price.required' => 'Price is required, please enter a positive value.',
             ]
         );
+
+            // return $val;
+            $val = $this->productValidation($request);
+
+            if ($val->fails())
+            {
+                return response()->json(['errors'=>$val->errors()->all()]);
+            }
+    
+             return redirect()->to('view_products')->with('success','Product added successfully');
     }
 
 
@@ -116,9 +126,10 @@ class ProductController extends Controller
 
     //Creating and Adding Products
     public function createProduct(Request $request)
-    {
-        //Product Validation
-        $this->productValidation($request);
+    {   
+          //Product Validation
+          $this->productValidation($request);
+       
         
         $data = $request->all();
         $image_src = $this->validImg($request);
@@ -135,9 +146,8 @@ class ProductController extends Controller
 
         ]);
 
-        return redirect()->to('view_products')->with('success','Product added successfully');
-          
-    }
+       
+}
 
     
 

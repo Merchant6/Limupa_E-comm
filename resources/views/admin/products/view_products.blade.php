@@ -9,7 +9,7 @@
 
   <form class="form-inline mx-3">
     <div class="search-element">
-      <input class="form-control border border-dark" id="search" type="search" placeholder="Search" aria-label="Search" data-width="200" style="width:200px">
+      <input class="form-control border border-dark" id="search" type="search" placeholder="Enter Product name or ID" aria-label="Search" style="width:77vw">
       
     </div>
   </form>
@@ -41,13 +41,13 @@
         <div class="card-body px-4">
           <div class="table-responsive">
             <table class="table table-striped table-hover">
-                <tbody>
+                {{-- <tbody> --}}
                        
                           <tr class="border border-dark">
                       
                             <th>Product Name</th>
                             <th>Short Decription</th>
-                            <th>Long Decription</th>
+                            <th >Long Decription</th>
                             <th class="align-center">Image</th>
                             <th>Category</th>
                             <th>Quantity</th>
@@ -60,8 +60,8 @@
                             
                                 <td>{{$products->name}}</td>
                                 <td>{{$products->s_description}}</td>
-                                <td>{{$products->l_description}}</td>
-                                <td class="align-center p-5"><img class="img-fluid" src="{{asset('images').'/'.$products->image_src}}"></td>
+                                <td style="overflow-x: scroll">{{$products->l_description}}</td>
+                                <td class="align-center p-3"><img class="img-fluid" src="{{asset('images').'/'.$products->image_src}}"></td>
                                 <td>{{$products->category}}</td>
                                 <td>{{$products->quantity}}</td>
                                 <td>{{$products->price}}</td>
@@ -88,7 +88,7 @@
                           
                         <tbody id="contentSearch"></tbody>
                        
-                </tbody>
+                {{-- </tbody> --}}
             </table>
             
           </div>
@@ -99,41 +99,31 @@
 </div>
 
 
- <!-- Search with Ajax -->
- <script type="text/javascript">
+<script src="{{asset('theme/assets/ajax/search.ajax.js')}}"></script>
 
-  
-  $('#search').on('keyup', function()
+{{-- <script>
+  $('#deleteBtn').click(function()
   {
-    $value = $(this).val();
+    var id = $(this).data("id")
+    // var token = $(" ").attr("content");
 
-    if($value)
+    $.ajax(
     {
-      $('#data').hide()
-      $('#contentSearch').show()
-    }
-    else
-    {
-      $('#data').show()
-      $('#contentSearch').hide()
-    }
+      url:'/delete_product/'+id,
+      type: 'DELETE',
+      data:
+      {
+        "id":id
+        "_token":'{{csrf_token()}}',
+      },
+      success:function(data)
+      {
+            console.log(data);
+      }
+    })
 
-    $.ajax
-    ({
-        type:'get',
-        url:'{{URL::to('search')}}',
-        data:{'search':$value},
-
-        success:function(data)
-        {
-          
-          $('#contentSearch').html(data);
-        }
-    });
-
-  })
-
-</script>
+  });
+</script> --}}
 
 
 @endsection
