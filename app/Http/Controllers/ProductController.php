@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Products;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 
 class ProductController extends Controller
@@ -15,7 +17,7 @@ class ProductController extends Controller
     public function search(Request $request)
     {
         $products = Products::where('name','like', '%'.$request->search.'%')
-                    ->orWhere('id','like', '%'.$request->search.'%')->get();
+                    ->orWhere('category','like', '%'.$request->search.'%')->get();
 
         $output = "";
         foreach($products as $products)
@@ -31,10 +33,19 @@ class ProductController extends Controller
                 <td>'.$products->price.'</td>
                 <td>'.'
                     <form action='.route('delete_product', $products->id).' method="POST" id="deleteBtn">
-                    <input type="hidden" name="_token" value='.csrf_token().'>
-                    <input type="hidden" name="_method" value="delete">
-                    <button class="btn btn-danger" type="submit">'.'Delete</button>
+                    
+                        <input type="hidden" name="_method" value="delete">
+                        <button class="btn btn-danger" type="submit">'.'Delete</button>
                     </form>
+                    
+                    '.'
+                </td>
+
+                <td>'.'
+                    <form action='.route('editNew', $products->id).' method="GET">
+                    <button class="btn btn-success" type="submit">Edit</button>
+              </form>
+                    
                     '.'
                 </td>
                
@@ -59,41 +70,45 @@ class ProductController extends Controller
     }
 
     
-    public function productValidation(Request $request)
+    public function productVerify(Request $request)
     {
-        $request->validate
-        (
-            [
-                'name' => 'required',
-                's_description' => 'required',
-                'l_description' => 'required',
-                'image_src' => 'required|mimes:jpg,png,jpeg',
-                'category' => 'required',
-                'quantity' => 'required|integer|not_in:0|regex:^[1-9][0-9]+^',
-                'price' => 'required|integer|not_in:0|regex:^[1-9][0-9]+^',
-            ],
 
-            [
-                'name.required' => 'Product Name is required.',
-                's_description.required' => 'Short Description is required.',
-                'l_description.required' => 'Long Description is required.',
-                'image_src.required' => 'Product Image is required.',
-                'image_src.mime' => 'Image format should be JPG, JPEG, or PNG',
-                'category.required' => 'Category is required.',
-                'quantity.required' => 'Quantity is required, please enter a positive value.',
-                'price.required' => 'Price is required, please enter a positive value.',
-            ]
-        );
-
-            // return $val;
-            $val = $this->productValidation($request);
-
-            if ($val->fails())
-            {
-                return response()->json(['errors'=>$val->errors()->all()]);
-            }
+            $val =  $request->validate
+            (
+                [
+                    'name' => 'required',
+                    's_description' => 'required',
+                    'l_description' => 'required',
+                    'image_src' => 'required|mimes:jpg,png,jpeg',
+                    'category' => 'required',
+                    'quantity' => 'required|integer|not_in:0|regex:^[1-9][0-9]+^',
+                    'price' => 'required|integer|not_in:0|regex:^[1-9][0-9]+^',
+                ],
     
-             return redirect()->to('view_products')->with('success','Product added successfully');
+                [
+                    'required' => 'The :attribute field is required',
+                    'mimes' => 'Image should be a JPG, JPEG, or PNG',
+                    'integer' =>  'The :attribute field should be an integer.', 
+                    's_descripton.required' => 'The short description is required',
+                    'l_descripton.required' => 'The long description is required',
+                    'image_src.required' => 'The image file is required.'
+                ]
+            );
+
+        
+        
+           
+                if (!$val)
+                {
+                    return response()->json(['errors'],421);
+                }
+                else
+                {
+                    return response()->json(['success' => 'Successful'],200);
+                }
+                
+            
+            
     }
 
 
@@ -102,16 +117,17 @@ class ProductController extends Controller
     {       
        
            
-            if ($request->hasFile('image_src')) {
+            if ($request->hasFile('image_src')) 
+            {
                 $filename = $request->file('image_src');
                 $filename->getClientOriginalName();
                 $filename = time().$filename->getClientOriginalName();
                 $destinationPath = base_path("/public/images");
                 $request->file('image_src')->move($destinationPath, $filename);
                 $data['image_src'] = $filename;
-                    }
+            }
+            
             return $data['image_src'];
-
     }
 
     /**
@@ -121,35 +137,50 @@ class ProductController extends Controller
      */
     public function create()
     {
+        
+
         return view('admin.products.add_products');
     }
 
     //Creating and Adding Products
     public function createProduct(Request $request)
-    {   
-          //Product Validation
-          $this->productValidation($request);
-       
-        
-        $data = $request->all();
-        $image_src = $this->validImg($request);
-        
-        Products::create
-        ([
-            'name' => $data['name'],
-            's_description' => $data['s_description'],
-            'l_description' => $data['l_description'],
-            'category' => $data['category'],
-            'quantity' => $data['quantity'],
-            'price' => $data['price'],
-            'image_src' => $image_src
+    {  
+              
+                
 
-        ]);
+               
+                
+            
+
+                //Product Validation
+                $validation =  $this->productVerify($request);
+                
+               
+                
+                $data = $request->all();
+                $image_src = $this->validImg($request);
+
+                Products::create
+                ([
+                    'name' => $data['name'],
+                    's_description' => $data['s_description'],
+                    'l_description' => $data['l_description'],
+                    'category' => $data['category'],
+                    'quantity' => $data['quantity'],
+                    'price' => $data['price'],
+                    'image_src' => $image_src
+
+                ]);
+              
+        
+
+               
+                 
+                
 
        
 }
-
-    
+  
 
      /**
      * Show the form for editing the specified resource.
@@ -172,14 +203,37 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //Product Validation
-        $validatedData = $this->productValidation($request);
         
-        $this->validImg($request);
-    
-        Products::whereId($id)->update($validatedData);
+        
+                
+                $data = request()->except(['_token']);
 
-        return redirect('view_products')->with('success', 'Product details successfully updated');
+                $validated =  $request->validate
+                ([
+                    'name' => 'string',
+                    's_description' => 'string|max:150',
+                    'l_description' => 'string|max:500',
+                    'image_src' => 'mimes:jpg,png,jpeg',
+                    'category' => 'string',
+                    'quantity' => 'integer|not_in:0|regex:^[1-9][0-9]+^',
+                    'price' => 'integer|not_in:0|regex:^[1-9][0-9]+^',
+                ],
+                [
+                    'required' => 'The :attribute field is required',
+                    'mimes' => 'Image should be a JPG, JPEG, or PNG',
+                    'integer' =>  'The :attribute field should be an integer.', 
+                ]);
+
+                Products::whereId($id)->update($validated);
+
+                
+            
+        
+
+       
+                return response()->json(['success' => 'Successful'],200);
+                
+        
     }
 
     /**
@@ -204,5 +258,12 @@ class ProductController extends Controller
         // $products->delete();
 
         return redirect('view_products')->with('error', 'Product successfully deleted');
+    }
+
+
+    public function editNew($id)
+    {
+        $product_edit = Products::findOrFail($id);
+        return view('admin.products.edit', compact('product_edit'));
     }
 }

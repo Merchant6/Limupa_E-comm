@@ -16,8 +16,10 @@
   <!-- Custom style CSS -->
   <link rel="stylesheet" href="{{asset('theme/assets/css/custom.css')}}">
   <link rel='shortcut icon' type='image/x-icon' href='{{asset('theme/assets/img/favicon.ico')}}' />
+  <!-- CKEditor  -->
+  <script src="{{asset('theme/ckeditor/ckeditor.js')}}"></script>
 
- 
+  
 </head>
 
 <style type="text/css">.apexcharts-canvas {
@@ -581,13 +583,13 @@
 
 
 
-      <footer class="main-footer">
-        <div class="footer-left">
-          <a href="templateshub.net">Templateshub</a>
-        </div>
-        <div class="footer-right">
-        </div>
-      </footer>
+        <footer class="main-footer">
+            <div class="footer-left">
+              <a href="templateshub.net">Templateshub</a>
+            </div>
+            <div class="footer-right">
+            </div>
+        </footer>
     </div>
   </div>
 
@@ -604,6 +606,7 @@
   <script src="{{asset('theme/assets/js/scripts.js')}}"></script>
   <!-- Custom JS File -->
   <script src="{{asset('theme/assets/js/custom.js')}}"></script>
+
   
 
 
