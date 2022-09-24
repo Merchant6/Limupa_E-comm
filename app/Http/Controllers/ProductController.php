@@ -7,7 +7,7 @@ use App\Models\Products;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
-
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -23,31 +23,27 @@ class ProductController extends Controller
         foreach($products as $products)
         {
             $output.=
-            '<tr class="border-bottom border-dark p-3">
+            '<tr role="row" class="odd">
+                <td>'.$products->id.'</td>
                 <td>'.$products->name.'</td>
-                <td>'.$products->s_description.'</td>
-                <td>'.$products->l_description.'</td>
-                <td class="align-center p-5"><img class="img-fluid" src='.asset('images')."/".$products->image_src.'></td>
                 <td>'.$products->category.'</td>
+                <td>'.$products->s_description.'</td>
                 <td>'.$products->quantity.'</td>
                 <td>'.$products->price.'</td>
                 <td>'.'
                     <form action='.route('delete_product', $products->id).' method="POST" id="deleteBtn">
-                    
                         <input type="hidden" name="_method" value="delete">
                         <button class="btn btn-danger" type="submit">'.'Delete</button>
+                    </form>
+
+                    <form action='.route('editNew', $products->id).' method="GET">
+                        <button class="btn btn-success" type="submit">Details</button>
                     </form>
                     
                     '.'
                 </td>
 
-                <td>'.'
-                    <form action='.route('editNew', $products->id).' method="GET">
-                    <button class="btn btn-success" type="submit">Edit</button>
-              </form>
-                    
-                    '.'
-                </td>
+                
                
              </tr>
             ';
@@ -65,7 +61,7 @@ class ProductController extends Controller
      */
     public function viewProducts()
     {
-        $p_details = Products::all();
+        $p_details = Products::simplePaginate(20);
         return view('admin.products.view_products', compact('p_details'));
     }
 
@@ -119,6 +115,7 @@ class ProductController extends Controller
            
             if ($request->hasFile('image_src')) 
             {
+                
                 $filename = $request->file('image_src');
                 $filename->getClientOriginalName();
                 $filename = time().$filename->getClientOriginalName();
@@ -203,37 +200,75 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
-        
-                
-                $data = request()->except(['_token']);
 
-                $validated =  $request->validate
-                ([
-                    'name' => 'string',
-                    's_description' => 'string|max:150',
-                    'l_description' => 'string|max:500',
+            
+                $product_edit = Products::findOrFail($id);
+                $requestData = $request->except(['_token']);
+               
+               
+            
+                $val =  Validator::make($requestData,
+                    [
+                    'name' => 'string|min:3|max:50',
+                    's_description' => 'min:10|max:150',
+                    'l_description' => 'min:50|max:1000',
                     'image_src' => 'mimes:jpg,png,jpeg',
                     'category' => 'string',
                     'quantity' => 'integer|not_in:0|regex:^[1-9][0-9]+^',
                     'price' => 'integer|not_in:0|regex:^[1-9][0-9]+^',
-                ],
-                [
-                    'required' => 'The :attribute field is required',
-                    'mimes' => 'Image should be a JPG, JPEG, or PNG',
-                    'integer' =>  'The :attribute field should be an integer.', 
-                ]);
-
-                Products::whereId($id)->update($validated);
+                    ]
+                );
 
                 
-            
-        
-
-       
-                return response()->json(['success' => 'Successful'],200);
                 
-        
+                if ($request->hasFile('image_src')) 
+                    {
+                        $ExistPath = base_path("/public/images/").$product_edit->image_src;
+                        if(File::exists($ExistPath))
+                        {
+                            File::delete($ExistPath);
+                        }
+                        $filename = $request->file('image_src');
+                        $filename->getClientOriginalName();
+                        $filename = time().$filename->getClientOriginalName();
+                        $destinationPath = base_path("/public/images");
+                        $request->file('image_src')->move($destinationPath, $filename);
+                        $requestData['image_src'] = $filename;
+                        
+                    }
+
+                   
+                    if($val->fails())
+                    {
+                        return response()->json([
+                            'status' => 'error',
+                            'error' => 'Something went wrong, please update the value again and make sure the field is not empty.'
+                        ],421);    
+                        
+                    }
+                    
+                    else
+                    {
+                        Products::whereId($id)->update($requestData); 
+                    
+                        return response()->json([
+                            'status' => 'success',
+                            'data' => 'Product updated successfully.'
+                        ],200);
+                    }
+                         
+                                  
+                                    
+                   
+                   
+                    
+
+                 
+               
+
+
+
+                             
     }
 
     /**
