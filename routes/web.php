@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+//Dashboard
+Route::get('store',[StoreController::class, 'index'])->name('store');
+Route::get('/', function () {return redirect()->route('store');});
 
+Route::get('slogin',[StoreController::class, 'store'])->name('slogin');
 
 
 Route::group(['middleware' => ['guest:admin']], function() {
@@ -40,7 +45,7 @@ Route::group(['middleware' => ['guest:admin']], function() {
 
           //Dashboard
           Route::get('dashboard',[AdminController::class, 'dashboard'])->name('dashboard');
-          Route::get('/', function () {return redirect()->route('dashboard');});
+          
 
           //SignOut
           Route::get('admin_signout',[AdminController::class, 'signOut'])->name('signout');
