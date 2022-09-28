@@ -26,7 +26,7 @@
 	<link rel="stylesheet" href="karma/css/ion.rangeSlider.skinFlat.css">
 	<link rel="stylesheet" href="karma/css/magnific-popup.css">
 	<link rel="stylesheet" href="karma/css/main.css">
-<script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/50/6/common.js"></script><script type="text/javascript" charset="UTF-8" src="https://maps.googleapis.com/maps-api-v3/api/js/50/6/util.js"></script></head>
+	<script src="karma/js/vendor/jquery-2.2.4.min.js"></script>
 
 <body>
 
@@ -177,7 +177,7 @@
 	</footer>
 	<!-- End footer Area -->
 
-	<script src="karma/js/vendor/jquery-2.2.4.min.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
 	<script src="karma/js/vendor/bootstrap.min.js"></script>
 	<script src="karma/js/jquery.ajaxchimp.min.js"></script>

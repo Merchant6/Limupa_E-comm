@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,6 +23,7 @@ Route::get('store',[StoreController::class, 'index'])->name('store');
 Route::get('/', function () {return redirect()->route('store');});
 
 Route::get('slogin',[StoreController::class, 'store'])->name('slogin');
+Route::post('UserRegis',[UserController::class, 'customUserRegistration'])->name('UserRegis');  
 
 
 Route::group(['middleware' => ['guest:admin']], function() {

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('fname');
             $table->string('lname');
             $table->string('email')->unique();
-            $table->integer('pnum');
+            $table->string('pnum');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
