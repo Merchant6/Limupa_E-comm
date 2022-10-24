@@ -3,9 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Products;
+use App\Models\Reviews;
+use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
 {
+
+
+    
+
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +21,9 @@ class StoreController extends Controller
      */
     public function index()
     {
-        return view('store.storeHome.home');
+        
+        $latest = Products::latest()->limit(8)->get();
+        return view('store.storeHome.home',['latest' => $latest]);
     }
 
     /**
@@ -34,7 +44,7 @@ class StoreController extends Controller
      */
     public function store()
     {
-        return view('store.auth.signIn');
+        
     }
 
     /**
@@ -45,7 +55,21 @@ class StoreController extends Controller
      */
     public function show($id)
     {
-        return view('store.storeProducts.detailProduct');
+        $product_details = Products::findOrFail($id);
+        $quantity = $product_details->quantity;
+
+        // $product = Products::where('id', $id)->with('users')->first();
+
+        if($quantity == "0")
+        {
+            $stock = "Not in Stock"; 
+        }
+        else
+        {
+            $stock = "In Stock";
+        }
+        
+        return view('store.storeProducts.detailProduct',compact('product_details', 'stock'));
     }
 
     /**
@@ -70,6 +94,8 @@ class StoreController extends Controller
     {
         //
     }
+
+   
 
     /**
      * Remove the specified resource from storage.

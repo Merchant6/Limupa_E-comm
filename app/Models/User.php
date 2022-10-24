@@ -46,4 +46,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+    * Get the products the user has added.
+    */
+    public function products()
+    {
+        return $this->hasMany('App\Models\Products');
+    }
+
+    
+     /**
+     * Get the reviews the user has made.
+     */
+    public function reviews()
+    {
+        return $this->hasMany('App\Models\Reviews');
+    }
 }

@@ -75,16 +75,17 @@
                 <div class="col-lg-6 my-auto">
                     <div class="login_form_inner">
                         <h3>Log in to enter</h3>
-                        <form class="row login_form" action="" method="post" id="contactForm" novalidate="novalidate">
+                        <form class="row login_form" action="{{route('UserLogin')}}" method="post" id="contactForm" novalidate="novalidate">
+                            @csrf
                             <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+                                <input type="text" class="form-control" id="name" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
                             </div>
                             <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+                                <input type="password" class="form-control" id="name" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
                             </div>
                             <div class="col-md-12 form-group">
                                 <div class="creat_account">
-                                    <input type="checkbox" id="f-option2" name="selector">
+                                    <input type="checkbox" id="f-option2" name="remember">
                                     <label for="f-option2">Keep me logged in</label>
                                 </div>
                             </div>
@@ -100,45 +101,5 @@
     </section>
 
 
-    <script>
-        $(document).ready(function()
-    {
-      $('#CreateForm').submit(function(e)
-        {
-            // Stop form from submitting normally
-            e.preventDefault();
-
-            // var formData = new FormData(this);
-            var formData = new FormData(this);
-
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                          },
-                    type:'POST',
-                    url: '/UserRegis',
-                    data: formData,
-                    contentType: false,
-                    dataType: 'json',
-                    processData: false,
-
-                    success:function(xhr)
-                    {
-                            
-                            $("#msgModal #modal-content").text(xhr.data);
-                            $("#msgModal").modal();
-
-                    },
-
-                    error:function(jqXHR)
-                    {
-
-                        responseER = jqXHR.responseJSON  
-                        $("#msgModal #modal-content").text(responseER.error);
-                        $("#msgModal").modal();
-                    }
-                    });
-        })
-    })
-    </script>
+    <script src="{{asset('karma/ajax/signUp.ajax.js')}}"></script>
 @endsection

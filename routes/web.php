@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,8 +23,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('store',[StoreController::class, 'index'])->name('store');
 Route::get('/', function () {return redirect()->route('store');});
 
-Route::get('slogin',[StoreController::class, 'store'])->name('slogin');
+Route::get('show/{id?}',[StoreController::class, 'show'])->name('show');
+
+Route::get('slogin',[UserController::class, 'UserLogin'])->name('slogin');
 Route::post('UserRegis',[UserController::class, 'customUserRegistration'])->name('UserRegis');  
+Route::post('UserLogin',[UserController::class, 'UserCustomLogin'])->name('UserLogin');
+
+//createComment
+Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment');
+
 
 
 Route::group(['middleware' => ['guest:admin']], function() {

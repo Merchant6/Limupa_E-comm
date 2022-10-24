@@ -34,4 +34,21 @@ class Products extends Model implements Authenticatable
         'price',
         
     ];
+
+    /**
+     * Get the reviews of the product.
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Reviews::class, 'product_id', 'id');
+    }
+
+    /**
+     * Get the user that added the product.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
 }

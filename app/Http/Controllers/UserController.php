@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function UserLogin()
+    {
+        return view('store.auth.signIn');
+    }
+
     public function create(array $data)
     {
         return User::create([
@@ -46,7 +52,7 @@ class UserController extends Controller
         
         // return redirect()->back();
 
-        if($val->fails())
+                    if($val->fails())
                     {
                         return response()->json([
                             'status' => 'error',
@@ -68,5 +74,40 @@ class UserController extends Controller
        
        
     }
+
+
+    public function UserCustomLogin(Request $request)
+    {
+        $requestData = $request->except(['_token']);
+        
+         Validator::make($requestData,
+        [
+        
+        'username' => 'required|min:5|max:20',
+        'password' => 'required|min:8',
+        
+        ]
+        
+        );
+
+            $remember = ( !empty( $request->remember ) ) ? TRUE : FALSE;
+            $credentials = $request->only(['username', 'password'], $remember);
+            
+            //Check Email and Password from Request
+            if(Auth::guard('web')->attempt($credentials, $remember)) 
+            {
+
+                //redirect to Dashboard
+                return redirect()->intended('store')->with('success', 'Signed in');
+                
+            }
+      
+            return redirect()->back();
+            
+            
+    
+    }  
+
+
 
 }
