@@ -26,6 +26,8 @@ class StoreController extends Controller
         return view('store.storeHome.home',['latest' => $latest]);
     }
 
+   
+
     /**
      * Show the form for creating a new resource.
      *

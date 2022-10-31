@@ -37,11 +37,13 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Reviews::factory(100)->create();
 
         $faker = Faker::create();
-    	foreach (range(1,30) as $index) {
+    	foreach (range(1,50) as $index) {
             DB::table('reviews')->insert([
-                'user_id' => User::factory()->create()->id,
+                'user_id' =>  rand(1,22),
                 'product_id' => Products::factory()->create()->id,
                 'comment' => $faker->paragraph(1),
+                'created_at' => $faker->date(),
+                'updated_at' => $faker->date(),
                
 
             ]);

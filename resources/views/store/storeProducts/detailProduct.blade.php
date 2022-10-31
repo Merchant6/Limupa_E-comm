@@ -26,7 +26,7 @@
                                 <img src="{{'/images/'.$product_details->image_src }}" class="img-fluid" alt="">
                             </div>
 
-                            <div class="col-lg-5">
+                            <div class="col-lg-5 product_data">
                                 <div class="s_product_text">
                                     <h3>{{$product_details->name}}</h3>
                                     <h2>${{$product_details->price}}</h2>
@@ -38,13 +38,14 @@
                                     <p>{{$product_details->l_description}}</p>
                                     <div class="product_count">
                                         <label for="qty">Quantity:</label>
-                                        <input type="num" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
+                                        <input class="product_id" type="hidden" name="product_id" value="{{$product_details->id}}">
+                                        <input class="qty-input" type="num" name="qty" id="sst" maxlength="12" value="1" title="Quantity:" class="input-text qty">
                                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;" class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
                                         <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;" class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                                         
                                     </div>
                                     <div class="card_area d-flex align-items-center">
-                                        <a class="primary-btn" href="#">Add to Cart</a>
+                                        <a class="primary-btn addToCart" href="#">Add to Cart</a>
                                         {{-- <a class="icon_btn" href="#"><i class="lnr lnr lnr-diamond"></i></a>
                                         <a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a> --}}
                                     </div>

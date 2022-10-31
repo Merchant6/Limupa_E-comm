@@ -10,6 +10,10 @@
 	<meta name="keywords" content="">
 	<!-- meta character set -->
 	<meta charset="UTF-8">
+
+	<!--CSRF_TOKEN-->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+
 	<!-- Site Title -->
 	<title>Karma Shop</title>
 	<!--
@@ -27,6 +31,7 @@
 	<link rel="stylesheet" href="/karma/css/magnific-popup.css">
 	<link rel="stylesheet" href="/karma/css/main.css">
 	<script src="/karma/js/vendor/jquery-2.2.4.min.js"></script>
+	
 
 <body>
 
@@ -64,18 +69,16 @@
                                         <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
                                     </ul>
                                 </li>
-                                <li class="nav-item submenu dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pages</a>
-                                    <ul class="dropdown-menu">
-                                        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
-                                        <li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
-                                    </ul>
+
+								<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+
+                                <li class="nav-item submenu dropdown my-auto">
+                                    <a href="/cart" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="ti-bag"></span></a>
+                                   
                                 </li>
-                                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                                
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
-                                <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
                                 <li class="nav-item">
                                     <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                                 </li>
@@ -191,6 +194,9 @@
 	{{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script> --}}
 	{{-- <script src="karma/js/gmaps.min.js"></script> --}}
 	<script src="/karma/js/main.js"></script>
+
+	{{--Custom Add To Cart--}}
+	<script src="/karma/ajax/cart.ajax.js"></script>
 
 
 </body></html>

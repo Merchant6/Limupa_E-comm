@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +33,9 @@ Route::post('UserLogin',[UserController::class, 'UserCustomLogin'])->name('UserL
 //createComment
 Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment');
 
-
+//Cart
+Route::get('cart',[CartController::class, 'cart'])->name('cart');
+Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
 
 Route::group(['middleware' => ['guest:admin']], function() {
 
