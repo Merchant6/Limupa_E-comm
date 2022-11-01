@@ -93,7 +93,7 @@
                         </div>
 
                         <div class="col-lg-3 mx-auto mb-3">
-                                <a class="primary-btn" href="#">Back To Shopping</a>
+                                <a class="primary-btn" href="/store">Back To Shopping</a>
                         </div>
 
                         <div class="col-lg-3 mx-auto">
@@ -106,8 +106,16 @@
                     </div>
                     </div>
                 @endif    
-            {{-- @else --}}
-
+            @else
+            <div class="row">
+                <div class="col-md-12 mycard py-5 text-center">
+                    <div>
+                        <h2>Your cart is currently empty.</h2>
+                        <br>
+                        <a class="primary-btn" href="/store">Back To Shopping</a>
+                    </div>
+                </div>
+            </div>
             @endif    
         </div>
     </section>

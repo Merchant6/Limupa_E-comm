@@ -14,6 +14,7 @@
 	<!--CSRF_TOKEN-->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
+	
 	<!-- Site Title -->
 	<title>Karma Shop</title>
 	<!--
@@ -29,10 +30,11 @@
 	<link rel="stylesheet" href="/karma/css/ion.rangeSlider.css">
 	<link rel="stylesheet" href="/karma/css/ion.rangeSlider.skinFlat.css">
 	<link rel="stylesheet" href="/karma/css/magnific-popup.css">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>	
+
 	<link rel="stylesheet" href="/karma/css/main.css">
 	<script src="/karma/js/vendor/jquery-2.2.4.min.js"></script>
 	
-
 <body>
 
 	<!-- Start Header Area -->
@@ -73,9 +75,9 @@
 								<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
 
                                 <li class="nav-item submenu dropdown my-auto">
-                                    <a href="/cart" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="ti-bag"></span></a>
-                                   
-                                </li>
+                                    <a href="/cart" class="nav-link" aria-haspopup="true" aria-expanded="false"><span class="ti-bag"></span> <span class="badge badge-pill badge-danger font-weight-normal counter" style="font-size: 15px">0</span></a>
+									
+                            	 </li>
                                 
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
@@ -197,6 +199,11 @@
 
 	{{--Custom Add To Cart--}}
 	<script src="/karma/ajax/cart.ajax.js"></script>
+
+	<!--Alertify-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/AlertifyJS/1.13.1/alertify.min.js" integrity="sha512-JnjG+Wt53GspUQXQhc+c4j8SBERsgJAoHeehagKHlxQN+MtCCmFDghX9/AcbkkNRZptyZU4zC8utK59M5L45Iw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	
+
 
 
 </body></html>

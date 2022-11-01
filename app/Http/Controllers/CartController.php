@@ -81,4 +81,23 @@ class CartController extends Controller
          }
        
     }
+
+    public function cartLoadAjax()
+    {
+        if (Cookie::get('shopping_cart')) 
+        {
+            $cookie_data  = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            $total_cart = count($cart_data);
+
+            echo json_encode(array('totalcart' => $total_cart)); die;
+            return;
+        }
+        else
+        {
+            $total_cart = "0";
+            echo json_encode(array('totalcart' => $total_cart)); die;
+            return;
+        }
+    }
 }

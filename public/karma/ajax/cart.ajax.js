@@ -1,3 +1,33 @@
+
+$(document).ready(function () {
+    cartload();
+});
+
+function cartload()
+{
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $.ajax({
+        url: '/load-cart-data',
+        method: "GET",
+        success: function (response) {
+            $('.counter').html('');
+            var parsed = jQuery.parseJSON(response)
+            var value = parsed; //Single Data Viewing
+            $('.counter').html(value['totalcart']);
+        }
+    });
+}
+
+
+
+
+
+
 $(document).ready(function()
 {
     $('.addToCart').click(function (e)
@@ -23,7 +53,9 @@ $(document).ready(function()
             },
             success: function (response) {
                 
-                alertify.success(response.status);
+                alertify.set('notifier', 'position', 'bottom-right');
+                alertify.success(response.status, 5);
+               cartload(); 
             },
         })
     })

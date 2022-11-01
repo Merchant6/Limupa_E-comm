@@ -36,6 +36,7 @@ Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment')
 //Cart
 Route::get('cart',[CartController::class, 'cart'])->name('cart');
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
+Route::get('load-cart-data',[CartController::class, 'cartLoadAjax'])->name('load-cart-data');
 
 Route::group(['middleware' => ['guest:admin']], function() {
 
