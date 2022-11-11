@@ -20,6 +20,8 @@
             @if(isset($cart_data))
                 @if(Cookie::get('shopping_cart'))
                 @php $total= 0 @endphp
+                @php $btnCount = 0 @endphp
+                @php $subTotal = 0 @endphp
                     <div class="cart_inner">
                     <div class="table-responsive">
                         <table class="table">
@@ -50,25 +52,55 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <h5>$ {{$data['item_price']}}</h5>
+                                            <h5 id="price{{$btnCount}}">$ {{$data['item_price']}}</h5>
                                         </td>
                                         <td>
+
+                                            @php $btnCount++ @endphp
                                             <div class="product_count">
-                                                <input type="text" name="qty" id="sst" maxlength="12" value="{{$data['item_quantity']}}" title="Quantity:" class="input-text qty">
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;" class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                                <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;" class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                                <input type="hidden" class="product_id" value="{{ $data['item_id'] }}">
+                                                <input type="text" name="qty" id="sst{{$btnCount}}" maxlength="12" value="{{$data['item_quantity']}}" title="Quantity:" class="input-text qty-input">
+                                                
+                                                <button 
+                                                    onclick="var result = document.getElementById('sst{{$btnCount}}'); 
+                                                    var sst = result.value; 
+                                                    if( !isNaN( sst )) result.value++;
+                                                    return true;"
+                                                class="increase items-count" type="button">
+                                                    <i class="lnr lnr-chevron-up"></i>
+                                                </button>
+
+                                                <button 
+                                                    onclick="var result = document.getElementById('sst{{$btnCount}}'); 
+                                                    var sst = result.value; 
+                                                    if( !isNaN( sst )) result.value++;
+                                                    return true;" 
+                                                class="reduced items-count" type="button">
+                                                    <i class="lnr lnr-chevron-down"></i>
+                                                </button>
+                                            
                                             </div>
                                         </td>
-                                        <td>
-                                            <h5>$ {{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
-                                        </td>
+                                        
+                                        {{-- @php $subTotal++ @endphp --}}
+                                            <td class="totalAjax">
+                                               
+                                                <h5 class="totalH5{{$btnCount}}">$ {{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
+                                            </td>
 
                                         <td>
                                             <button class="border-0"><a href="" class="primary-btn">Delete</a></button>
                                             
                                         </td>
-                                        
+                                        <script>
+                                            var sst = $("#sst{{$btnCount}}").val()
+                                            var th5 = $(".totalH5{{$btnCount}}").val()
+                                            var price =  $("#price{{$btnCount}}").val()
+
+                                            console.log(price);
+                                        </script>
                                         @php $total = $total + ($data['item_price'] * $data['item_quantity']) @endphp
+                                        
                                     </tr>
                                 @endforeach
 
@@ -120,4 +152,6 @@
         </div>
     </section>
 
+
+   
 @endsection
