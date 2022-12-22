@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Products;
 use App\Models\Reviews;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
@@ -22,11 +23,16 @@ class StoreController extends Controller
     public function index()
     {
         
-        $latest = Products::latest()->limit(8)->get();
+        $latest = Products::query()->select(['id','s_description','image_src','price'])->latest()->limit(8)->get();
         return view('store.storeHome.home',['latest' => $latest]);
     }
 
-   
+    public function checkOut()
+    {
+        $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+        $cart_data = json_decode($cookie_data, true);
+        return view('store.storeHome.billingInfo')->with('cart_data', $cart_data);
+    }
 
     /**
      * Show the form for creating a new resource.

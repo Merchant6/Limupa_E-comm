@@ -6,6 +6,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PayPalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,10 @@ Route::get('slogin',[UserController::class, 'UserLogin'])->name('slogin');
 Route::post('UserRegis',[UserController::class, 'customUserRegistration'])->name('UserRegis');  
 Route::post('UserLogin',[UserController::class, 'UserCustomLogin'])->name('UserLogin');
 
+//Checkout
+Route::get('checkout',[StoreController::class, 'checkOut'])->name('checkout');
+
+
 //createComment
 Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment');
 
@@ -38,6 +43,11 @@ Route::get('cart',[CartController::class, 'cart'])->name('cart');
 Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
 Route::get('load-cart-data',[CartController::class, 'cartLoadAjax'])->name('load-cart-data');
 Route::post('update-cart-data',[CartController::class, 'updateCartData'])->name('update-cart-data');
+
+//Paypal 
+Route::post('payment', [PayPalController::class, 'payment'])->name('payment');
+// Route::get('cancel', 'PayPalController')->name('payment.cancel');
+// Route::get('payment/success', 'PayPalController')->name('payment.success');
 
 Route::group(['middleware' => ['guest:admin']], function() {
 

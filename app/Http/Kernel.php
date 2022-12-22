@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'adminAuth' => \App\Http\Middleware\adminAuth::class //Registering New Middleware
+        'adminAuth' => \App\Http\Middleware\adminAuth::class, //Registering New Middleware
+        'paypal' => \App\Http\Middleware\Paypal::class
     ];
 }

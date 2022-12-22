@@ -119,8 +119,8 @@
                               <div class="product-details">
                                  <h6>{{$l->s_description}}</h6>
                                  <div class="price">
-                                    <h6>$150.00</h6>
-                                    <h6 class="l-through">$210.00</h6>
+                                    <h6>${{$l->price}}</h6>
+                                    {{-- <h6 class="l-through"></h6> --}}
                                  </div>
                                  <div class="prd-bottom">
                                     {{-- <a href="" class="social-info">

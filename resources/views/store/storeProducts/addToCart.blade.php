@@ -22,9 +22,10 @@
                 @php $total= 0 @endphp
                 @php $btnCount = 0 @endphp
                 @php $subTotal = 0 @endphp
+                
                     <div class="cart_inner">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table pTable">
                             <thead class="text-center">
                                 <tr>
                                     <th scope="col">Image</th>
@@ -61,21 +62,22 @@
                                                 <input type="hidden" class="product_id" value="{{ $data['item_id'] }}">
                                                 <input type="text" name="qty" id="sst{{$btnCount}}" maxlength="12" value="{{$data['item_quantity']}}" title="Quantity:" class="input-text qty-input">
                                                 
+                                                
                                                 <button 
                                                     onclick="var result = document.getElementById('sst{{$btnCount}}'); 
                                                     var sst = result.value; 
                                                     if( !isNaN( sst )) result.value++;
                                                     return true;"
-                                                class="increase items-count" type="button">
+                                                    class="increase items-count changeQuantity" type="button">
                                                     <i class="lnr lnr-chevron-up"></i>
                                                 </button>
 
                                                 <button 
                                                     onclick="var result = document.getElementById('sst{{$btnCount}}'); 
                                                     var sst = result.value; 
-                                                    if( !isNaN( sst )) result.value++;
+                                                    if( !isNaN( sst ) && sst > 0 ) result.value--;
                                                     return true;" 
-                                                class="reduced items-count" type="button">
+                                                    class="reduced items-count changeQuantity" type="button">
                                                     <i class="lnr lnr-chevron-down"></i>
                                                 </button>
                                             
@@ -83,22 +85,15 @@
                                         </td>
                                         
                                         {{-- @php $subTotal++ @endphp --}}
-                                            <td class="totalAjax">
-                                               
-                                                <h5 class="totalH5{{$btnCount}}">$ {{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
+                                            <td id="totalAjax">
+                                                <h5 class="totalH5"> {{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
                                             </td>
 
                                         <td>
                                             <button class="border-0"><a href="" class="primary-btn">Delete</a></button>
                                             
                                         </td>
-                                        <script>
-                                            var sst = $("#sst{{$btnCount}}").val()
-                                            var th5 = $(".totalH5{{$btnCount}}").val()
-                                            var price =  $("#price{{$btnCount}}").val()
-
-                                            console.log(price);
-                                        </script>
+                                        
                                         @php $total = $total + ($data['item_price'] * $data['item_quantity']) @endphp
                                         
                                     </tr>
@@ -129,7 +124,7 @@
                         </div>
 
                         <div class="col-lg-3 mx-auto">
-                             <a class="primary-btn" href="#">Proceed to checkout</a>
+                             <a class="primary-btn" href="/checkout">Proceed to checkout</a>
                         </div>
 
                         <div class="col-lg-3">

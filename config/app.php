@@ -182,6 +182,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         'Intervention\Image\ImageServiceProvider',
+        Srmklive\PayPal\Providers\PayPalServiceProvider::class,
         
         /*
          * Package Service Providers...
@@ -213,6 +214,7 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Debugbar' => Barryvdh\Debugbar\Facade\Debugbar::class,
         'Image' => 'Intervention\Image\Facades\Image',
+        'PayPal' => Srmklive\PayPal\Facades\PayPal::class
     ])->toArray(),
 
 ];

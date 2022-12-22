@@ -32,21 +32,21 @@ class DatabaseSeeder extends Seeder
 
         //     ]);
         // }
-        // \App\Models\User::factory(3)->create();
-        // \App\Models\Products::factory(3)->create(); 
+        // \App\Models\User::factory(10)->create();
+        \App\Models\Products::factory(20)->create(); 
         // \App\Models\Reviews::factory(100)->create();
 
-        $faker = Faker::create();
-    	foreach (range(1,50) as $index) {
-            DB::table('reviews')->insert([
-                'user_id' =>  rand(1,22),
-                'product_id' => Products::factory()->create()->id,
-                'comment' => $faker->paragraph(1),
-                'created_at' => $faker->date(),
-                'updated_at' => $faker->date(),
+        // $faker = Faker::create();
+    	// foreach (range(1,50) as $index) {
+        //     DB::table('reviews')->insert([
+        //         'user_id' =>  rand(1,22),
+        //         'product_id' => Products::factory()->create()->id,
+        //         'comment' => $faker->paragraph(1),
+        //         'created_at' => $faker->date(),
+        //         'updated_at' => $faker->date(),
                
 
-            ]);
-        }
+        //     ]);
+        // }
     }
 }

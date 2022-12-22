@@ -17,9 +17,9 @@ class ReviewFactory extends Factory
     public function definition()
     {
         return [
-            // 'user_id'=> \App\Models\User::get()->random()->id,
-            // 'product_id'=> \App\Models\Products::get()->random()->id,
-            // 'comment'=> $this->faker->paragraph(1), 
+            'user_id'=> \App\Models\User::get()->random()->id,
+            'product_id'=> \App\Models\Products::get()->random()->id,
+            'comment'=> $this->faker->paragraph(1), 
         ];
     }
 }

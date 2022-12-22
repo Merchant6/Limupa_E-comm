@@ -18,150 +18,191 @@
 
     <section class="checkout_area section_gap">
         <div class="container">
-            <div class="returning_customer">
-                <div class="check_title">
-                    <h2>Returning Customer? <a href="#">Click here to login</a></h2>
-                </div>
-                <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new
-                    customer, please proceed to the Billing &amp; Shipping section.</p>
-                <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-                    <div class="col-md-6 form-group p_star">
-                        <input type="text" class="form-control" id="name" name="name">
-                        <span class="placeholder" data-placeholder="Username or Email"></span>
-                    </div>
-                    <div class="col-md-6 form-group p_star">
-                        <input type="password" class="form-control" id="password" name="password">
-                        <span class="placeholder" data-placeholder="Password"></span>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <button type="submit" value="submit" class="primary-btn">login</button>
-                        <div class="creat_account">
-                            <input type="checkbox" id="f-option" name="selector">
-                            <label for="f-option">Remember me</label>
-                        </div>
-                        <a class="lost_pass" href="#">Lost your password?</a>
-                    </div>
-                </form>
-            </div>
-            <div class="cupon_area">
-                <div class="check_title">
-                    <h2>Have a coupon? <a href="#">Click here to enter your code</a></h2>
-                </div>
-                <input type="text" placeholder="Enter coupon code">
-                <a class="tp_btn" href="#">Apply Coupon</a>
-            </div>
+            
+           
             <div class="billing_details">
                 <div class="row">
                     <div class="col-lg-8">
                         <h3>Billing Details</h3>
-                        <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                        <form class="row contact_form" action="{{route('payment')}}" method="post" novalidate="novalidate">
+                            @csrf
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="first" name="name">
+                                <input type="text" class="form-control" id="fname" name="fname">
                                 <span class="placeholder" data-placeholder="First name"></span>
                             </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="last" name="name">
+                                <input type="text" class="form-control" id="lname" name="lname">
                                 <span class="placeholder" data-placeholder="Last name"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="company" name="company" placeholder="Company name">
-                            </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="number" name="number">
+                                <input type="tel" class="form-control" id="pnum" name="pnum">
                                 <span class="placeholder" data-placeholder="Phone number"></span>
                             </div>
                             <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="email" name="compemailany">
+                                <input type="text" class="form-control" id="email" name="email">
                                 <span class="placeholder" data-placeholder="Email Address"></span>
                             </div>
-                            <div class="col-md-12 form-group p_star">
-                                <select class="country_select" style="display: none;">
-                                    <option value="1">Country</option>
-                                    <option value="2">Country</option>
-                                    <option value="4">Country</option>
-                                </select><div class="nice-select country_select" tabindex="0"><span class="current">Country</span><ul class="list"><li data-value="1" class="option selected">Country</li><li data-value="2" class="option">Country</li><li data-value="4" class="option">Country</li></ul></div>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="add1" name="add1">
-                                <span class="placeholder" data-placeholder="Address line 01"></span>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="add2" name="add2">
-                                <span class="placeholder" data-placeholder="Address line 02"></span>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
+                            <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="city" name="city">
-                                <span class="placeholder" data-placeholder="Town/City"></span>
+                                <span class="placeholder" data-placeholder="City"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="country" name="country">
+                                <span class="placeholder" data-placeholder="Country"></span>
                             </div>
                             <div class="col-md-12 form-group p_star">
-                                <select class="country_select" style="display: none;">
-                                    <option value="1">District</option>
-                                    <option value="2">District</option>
-                                    <option value="4">District</option>
-                                </select><div class="nice-select country_select" tabindex="0"><span class="current">District</span><ul class="list"><li data-value="1" class="option selected">District</li><li data-value="2" class="option">District</li><li data-value="4" class="option">District</li></ul></div>
+                                <input type="text" class="form-control" id="address" name="address">
+                                <span class="placeholder" data-placeholder="Street Address"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="zip" name="zip" placeholder="Postcode/ZIP">
+                            <div class="col-md-12 form-group p_star">
+                               
                             </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <input type="checkbox" id="f-option2" name="selector">
-                                    <label for="f-option2">Create an account?</label>
-                                </div>
+                            <div class="col-md-12 form-group p_star">
+                               
+                            </div>  
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="cnum" name="cnum">
+                                <span class="placeholder" data-placeholder="CC Number"></span>
                             </div>
-                            <div class="col-md-12 form-group">
-                                <div class="creat_account">
-                                    <h3>Shipping Details</h3>
-                                    <input type="checkbox" id="f-option3" name="selector">
-                                    <label for="f-option3">Ship to a different address?</label>
-                                </div>
-                                <textarea class="form-control" name="message" id="message" rows="1" placeholder="Order Notes"></textarea>
+                            <div class="col-md-6 form-group p_star text-center">
+                                <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Credit Card Type
+                                  </button>
+                                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="cursor: pointer;">
+                                    <ul>
+                                        <li class="dropdown-item" name="cc_type" value="visa">Visa</li>
+                                        <li class="dropdown-item" name="cc_type" value="master">Master</li>
+                                        <li class="dropdown-item" name="cc_type" value="americna_express">American Express</li>
+                                     
+                                    </ul>
+                                    </div>
                             </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="cc_month" name="cc_month">
+                                <span class="placeholder" data-placeholder="CC Month"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="cc_year" name="cc_year">
+                                <span class="placeholder" data-placeholder="CC Year"></span>
+                            </div>
+                            <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="cvv" name="cvv">
+                                <span class="placeholder" data-placeholder="CVV"></span>
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                               
+                            </div>
+                            <div class="col-md-12 form-group p_star">
+                               
+                            </div>  
+                            <div class="col-md-6 form-group p_star">
+                                <button type="submit" class="primary-btn rounded">Pay through Paypal</button>
+                               
+                            </div>
+                            
                         </form>
                     </div>
                     <div class="col-lg-4">
-                        <div class="order_box">
-                            <h2>Your Order</h2>
-                            <ul class="list">
-                                <li><a href="#">Product <span>Total</span></a></li>
-                                <li><a href="#">Fresh Blackberry <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                                <li><a href="#">Fresh Tomatoes <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                                <li><a href="#">Fresh Brocoli <span class="middle">x 02</span> <span class="last">$720.00</span></a></li>
-                            </ul>
-                            <ul class="list list_2">
-                                <li><a href="#">Subtotal <span>$2160.00</span></a></li>
-                                <li><a href="#">Shipping <span>Flat rate: $50.00</span></a></li>
-                                <li><a href="#">Total <span>$2210.00</span></a></li>
-                            </ul>
-                            <div class="payment_item">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option5" name="selector">
-                                    <label for="f-option5">Check payments</label>
-                                    <div class="check"></div>
+                      
+                                <div class="order_box">
+                                    <h2>Your Order</h2>
+                                        <ul class="list">
+                                       
+                                        @if(isset($cart_data))
+                                            @if(Cookie::get('shopping_cart'))
+                                                @php $total= 0 @endphp
+                                                <li><a href="">Product <span>Total</span></a></li>
+                                                @foreach ($cart_data as $data)
+                                                    <li><a href="">{{$data['item_name']}}<span class="middle"> x {{$data['item_quantity']}}</span> <span class="last">${{$data['item_price']}}</span></a></li>
+                                                    @php $total = $total + ($data['item_price'] * $data['item_quantity']) @endphp
+
+                                                @endforeach
+                                            @endif
+                                            <ul class="list list_2">
+                                                <li><a href="#">Subtotal <span>${{$total}}</span></a></li>
+                                                <li><a href="#">Shipping <span>Free</span></a></li>
+                                                <li><a href="#">Total <span id="total">{{$total}}</span></a></li>
+                                            </ul>
+                                            <div class="payment_item">
+                                        
+                                    
+                                                <div id="paypal-button-container"></div>
+        
+                                            </div>
+                                            @else 
+                                                <p>You do not have any products in your cart.</p>
+                                                <p><a href="/store">Go back to shopping.</a></p>
+                                        @endif        
+                                        </ul>
+                                    
+                                    
+                                    
+                                    
                                 </div>
-                                <p>Please send a check to Store Name, Store Street, Store Town, Store State / County,
-                                    Store Postcode.</p>
-                            </div>
-                            <div class="payment_item active">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option6" name="selector">
-                                    <label for="f-option6">Paypal </label>
-                                    <img src="img/product/card.jpg" alt="">
-                                    <div class="check"></div>
-                                </div>
-                                <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
-                                    account.</p>
-                            </div>
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option4" name="selector">
-                                <label for="f-option4">I’ve read and accept the </label>
-                                <a href="#">terms &amp; conditions*</a>
-                            </div>
-                            <a class="primary-btn" href="#">Proceed to Paypal</a>
-                        </div>
+                            
+                             
                     </div>
                 </div>
             </div>
         </div>
+        
     </section>
+    <script src="https://www.paypal.com/sdk/js?client-id=AdzTwO-HHkF8SkGgKHUCWrtCfvgi4JHg-856M8UVGApoc_Ye0Q3EWZFrtGFZs3LgFZQ1-YpeecFLOLcJ&currency=USD"></script>
+    <script>
+            total = document.getElementById('total').innerHTML 
+            console.log(total)
+            paypal.Buttons({
+    
+            // Sets up the transaction when a payment button is clicked
+    
+            createOrder: (data, actions) => {
+    
+                return actions.order.create({
+    
+                purchase_units: [{
+    
+                    amount: {
+    
+                    value: document.getElementById('total').innerHTML  // Can also reference a variable or function
+    
+                    }
+    
+                }]
+    
+                });
+    
+            },
+
+            
+            
+    
+            // Finalize the transaction after payer approval
+    
+            onApprove: (data, actions) => {
+    
+                return actions.order.capture().then(function(orderData) {
+    
+                // Successful capture! For dev/demo purposes:
+    
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+    
+                const transaction = orderData.purchase_units[0].payments.captures[0];
+    
+                alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+    
+                // When ready to go live, remove the alert and show a success message within this page. For example:
+    
+                // const element = document.getElementById('paypal-button-container');
+    
+                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+    
+                // Or go to another URL:  actions.redirect('thank_you.html');
+    
+                });
+    
+            }
+    
+            }).render('#paypal-button-container');
+  
+      </script>
 @endsection
