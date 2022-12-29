@@ -47,7 +47,7 @@ Route::post('update-cart-data',[CartController::class, 'updateCartData'])->name(
 //Paypal 
 Route::post('payment', [PayPalController::class, 'payment'])->name('payment');
 // Route::get('cancel', 'PayPalController')->name('payment.cancel');
-// Route::get('payment/success', 'PayPalController')->name('payment.success');
+Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success');
 
 Route::group(['middleware' => ['guest:admin']], function() {
 

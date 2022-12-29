@@ -4,15 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Symfony\Component\Mime\Encoder\Base64Encoder;
 
 class PayPalController extends Controller
 {
     public function payment(Request $request)
     {
-        //Requesting Access Token
-        $payment_id = "";
-        $payer_id = "";
-        $paypalURL = "https://api.sandbox.paypal.com";
+        
         $ch = curl_init();
 
         //Client Credentials from .env
@@ -42,14 +40,10 @@ class PayPalController extends Controller
         {
             $json = json_decode($result);
             $access_token = $json->access_token;
-            // dump($json);
         }
-           
-            // curl_close($ch);
-            // dump($token);
+        
 
         //Checking Cookie exists
-        
         $cookie = Cookie::get('shopping_cart');
         if($cookie)
         {
@@ -64,86 +58,75 @@ class PayPalController extends Controller
                 $total+= ($cart["item_quantity"] * $cart["item_price"]);   
             }
             
-            dump($total);
+            // dump($total);
 
             //Setting up data for Payment
 
             $curl = curl_init();
-           
 
-
-                // $data = '{ 
-                //         "payer_id": "'.$payer_id.'",
-
-                //       "transactions":[
-                //         {
-                //           "amount":{
-                //             "total":"1000",
-                //             "currency":"USD"
-                //           }
-                //         }
-                //     ],{
-                //     "intent":"sale",
-                //     "redirect_urls":{
-                //     "return_url":"'.route('store').'",
-                //     "cancel_url":"'.route('store').'"
-                //     },
-                //     "payer":{
-                //     "payment_method":"paypal"
-                //     },
-                //     "transactions":[
-                //     {
-                //         "amount":{
-                //         "total":"1000",
-                //         "currency":"USD"
-                //         }
-                //     }
-                //     ]
-                // }';
-                $data = '
+            //Setting data for order creation
+            $data = '
                 {
                     "intent": "CAPTURE",
+                    "payer": 
+                        {
+                            "payment_method": "paypal"
+                        },
+                        
+                        
 
                     "purchase_units": 
                     [
-                
-                        {
-                
-                            "amount": 
                             {
-                    
-                                "currency_code": "USD",
+                
+                                "amount": 
+                                {
                         
-                                "value": "'.$total.'"
+                                    "currency_code": "USD",
+                            
+                                    "value": "'.$total.'"
+                        
+                                }
+
+                           
                     
                             }
-                    
-                        }
                 
-                    ]
+                    ],
+                    
+                    "application_context": 
+                    {
+                        "return_url": "'.route('payment.success').'",
+                        "cancel_url": "'.route('payment.success').'"
+                    }
                 
                                   
                 }';
-        
-                // $payment_url = 'https://api-m.sandbox.paypal.com/v2/payments/authorizations/';
+                
+                //Creating order through cURL
                 curl_setopt($curl, CURLOPT_URL, "https://api.sandbox.paypal.com/v2/checkout/orders");
                 curl_setopt($curl, CURLOPT_POST, true);
                 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json","Authorization: Bearer ".$access_token));
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-                $response = curl_exec($curl);
+                $response = curl_exec($curl); 
                 $curl = curl_close($curl);
-                
-               // Retudn headers seperatly from the Response Body
-                
-                
                 $json2 = json_decode($response);
-                dump($json2->id);
+                dump($json2);
+                $order_id = $json2->id;
+                // dump($order_id);
+                return redirect("https://www.sandbox.paypal.com/checkoutnow?token=".$order_id);
+        
             
         }
             
 
+    }
+
+    public function success()
+    {
+        return view('store.payment.success');
     }
 
 

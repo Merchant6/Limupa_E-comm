@@ -24,8 +24,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <h3>Billing Details</h3>
-                        <form class="row contact_form" action="{{route('payment')}}" method="post" novalidate="novalidate">
-                            @csrf
+                        
                             <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="fname" name="fname">
                                 <span class="placeholder" data-placeholder="First name"></span>
@@ -95,12 +94,15 @@
                             <div class="col-md-12 form-group p_star">
                                
                             </div>  
-                            <div class="col-md-6 form-group p_star">
-                                <button type="submit" class="primary-btn rounded">Pay through Paypal</button>
-                               
-                            </div>
+
+                            <form class="row contact_form" action="{{route('payment')}}" method="post" novalidate="novalidate">
+                                @csrf
+                                <div class="col-md-6 form-group p_star">
+                                    <button type="submit" class="primary-btn rounded">Pay through Paypal</button>
+                                
+                                </div>
                             
-                        </form>
+                            </form>
                     </div>
                     <div class="col-lg-4">
                       
