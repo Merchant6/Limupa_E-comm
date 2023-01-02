@@ -8,9 +8,10 @@ use Symfony\Component\Mime\Encoder\Base64Encoder;
 
 class PayPalController extends Controller
 {
-    public function payment(Request $request)
+
+    public function accessToken()
     {
-        
+        $access_token = "";
         $ch = curl_init();
 
         //Client Credentials from .env
@@ -29,6 +30,7 @@ class PayPalController extends Controller
        
         //Getting response
         $result = curl_exec($ch);
+    
         
         
         //Checking response and getting Access Token
@@ -41,7 +43,14 @@ class PayPalController extends Controller
             $json = json_decode($result);
             $access_token = $json->access_token;
         }
+        return $access_token;
+    }
+   
         
+    public function payment()
+    {
+        
+        $access_token = $this->accessToken();
 
         //Checking Cookie exists
         $cookie = Cookie::get('shopping_cart');
@@ -124,9 +133,15 @@ class PayPalController extends Controller
 
     }
 
-    public function success()
+  
+
+    public function success(Request $request)
     {
-        return view('store.payment.success');
+        $order_id = $request->query('token');
+        $payer_id = $request->query('PayerID');
+        $url = $order_id." ".$payer_id;
+        // return view('store.payment.success')->with($url);
+        return $url;
     }
 
 
