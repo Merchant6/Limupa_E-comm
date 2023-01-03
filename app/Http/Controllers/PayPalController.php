@@ -31,8 +31,6 @@ class PayPalController extends Controller
         //Getting response
         $result = curl_exec($ch);
     
-        
-        
         //Checking response and getting Access Token
         if(empty($result))
         {
@@ -67,10 +65,8 @@ class PayPalController extends Controller
                 $total+= ($cart["item_quantity"] * $cart["item_price"]);   
             }
             
-            // dump($total);
-
+            
             //Setting up data for Payment
-
             $curl = curl_init();
 
             //Setting data for order creation
@@ -134,14 +130,30 @@ class PayPalController extends Controller
     }
 
   
-
+    //Getting Order ID and Payer ID through url query
     public function success(Request $request)
     {
+        $access_token = $this->accessToken();
+
         $order_id = $request->query('token');
         $payer_id = $request->query('PayerID');
-        $url = $order_id." ".$payer_id;
+        // $url = $order_id." ".$payer_id;
+
+        $curl = curl_init();
+
+         //Authorizing the payment
+         curl_setopt($curl, CURLOPT_URL, "https://api.sandbox.paypal.com/v2/checkout/orders/".$order_id."/capture");
+         curl_setopt($curl, CURLOPT_POST, true);
+         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json","Authorization: Bearer ".$access_token));
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+         $response = curl_exec($curl); 
+         $curl = curl_close($curl);
+         $json = json_decode($response);
+         dump($json);
+
         // return view('store.payment.success')->with($url);
-        return $url;
+        
     }
 
 

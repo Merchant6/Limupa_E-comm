@@ -54,7 +54,7 @@
                         <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                             <ul class="nav navbar-nav menu_nav ml-auto">
                                 <li class="nav-item"><a class="nav-link" href="/store">Home</a></li>
-                                <li class="nav-item submenu dropdown">
+                                {{-- <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Shop</a>
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
@@ -63,16 +63,17 @@
                                         <li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
                                         <li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
                                     </ul>
-                                </li>
-                                <li class="nav-item submenu dropdown">
+                                </li> --}}
+                                {{-- <li class="nav-item submenu dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Blog</a>
                                     <ul class="dropdown-menu">
                                         <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
                                         <li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
 								<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+								<li class="nav-item"><a class="nav-link" href="contact.html">About</a></li>
 
                                 <li class="nav-item submenu dropdown my-auto">
                                     <a href="/cart" class="nav-link" aria-haspopup="true" aria-expanded="false"><span class="ti-bag"></span> <span class="badge badge-pill badge-danger font-weight-normal counter" style="font-size: 15px">0</span></a>
@@ -80,16 +81,16 @@
                             	 </li>
                                 
                             </ul>
-                            <ul class="nav navbar-nav navbar-right">
+                            {{-- <ul class="nav navbar-nav navbar-right">
                                 <li class="nav-item">
                                     <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                                 </li>
-                            </ul>
+                            </ul> --}}
                         </div>
                     </div>
                 </nav>
             </div>
-            <div class="search_input" id="search_input_box" style="display: none;">
+            {{-- <div class="search_input" id="search_input_box" style="display: none;">
                 <div class="container">
                     <form class="d-flex justify-content-between">
                         <input type="text" class="form-control" id="search_input" placeholder="Search Here">
@@ -97,7 +98,7 @@
                         <span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
                     </form>
                 </div>
-            </div>
+            </div> --}}
 	    </header>
     </div>
 	<!-- End Header Area -->

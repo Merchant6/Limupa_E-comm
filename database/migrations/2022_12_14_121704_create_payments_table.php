@@ -17,10 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('payment_id');
             $table->string('payer_id');
-            $table->string('payert_email');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('payer_email');
+            $table->string('payment_status');
             $table->float('amount', 10, 2);
             $table->string('currency');
-            $table->string('payment_status');
             $table->timestamps();
         });
     }
@@ -33,5 +34,11 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('payments');
+        Schema::table('payments', function (Blueprint $table) {
+            $table->dropForeign('lists_user_id_foreign');
+            $table->dropIndex('lists_user_id_index');
+            $table->dropColumn('user_id');
+        });
+       
     }
 };
