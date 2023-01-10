@@ -133,6 +133,7 @@ class PayPalController extends Controller
     //Getting Order ID and Payer ID through url query
     public function success(Request $request)
     {
+       
         $access_token = $this->accessToken();
 
         $order_id = $request->query('token');
@@ -149,8 +150,20 @@ class PayPalController extends Controller
          curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
          $response = curl_exec($curl); 
          $curl = curl_close($curl);
-         $json = json_decode($response);
-         dump($json);
+         $json = json_decode($response, true);
+        //  dump($json);
+        
+
+            //Payment table fields
+            foreach($json["purchase_units"] as $keys => $item)
+            {
+                //payment_id
+                $payment_id = $item["payments"]["captures"][0]["id"];  
+                //  
+            }
+        
+
+         
 
         // return view('store.payment.success')->with($url);
         

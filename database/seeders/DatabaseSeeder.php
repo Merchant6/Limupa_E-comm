@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use App\Models\Reviews;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        
         // $faker = Faker::create();
     	// foreach (range(1,30) as $index) {
         //     DB::table('products')->insert([
@@ -32,9 +34,10 @@ class DatabaseSeeder extends Seeder
 
         //     ]);
         // }
-        // \App\Models\User::factory(10)->create();
-        \App\Models\Products::factory(20)->create(); 
-        // \App\Models\Reviews::factory(100)->create();
+
+        User::factory(10)->create();
+        Products::factory(10)->create(); 
+        // Reviews::factory(50)->create();
 
         // $faker = Faker::create();
     	// foreach (range(1,50) as $index) {

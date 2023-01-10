@@ -64,4 +64,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Reviews');
     }
-}
+
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+ }

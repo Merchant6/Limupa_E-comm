@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('payment_info', function (Blueprint $table) {
             $table->id();
             $table->string('payment_id');
             $table->string('payer_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('payer_email');
             $table->string('payment_status');
@@ -33,12 +34,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('payment_info');
         Schema::table('payments', function (Blueprint $table) {
             $table->dropForeign('lists_user_id_foreign');
             $table->dropIndex('lists_user_id_index');
             $table->dropColumn('user_id');
         });
-       
     }
 };
