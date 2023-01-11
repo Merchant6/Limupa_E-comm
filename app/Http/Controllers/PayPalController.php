@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Orders;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\Mime\Encoder\Base64Encoder;
@@ -133,7 +135,6 @@ class PayPalController extends Controller
     //Getting Order ID and Payer ID through url query
     public function success(Request $request)
     {
-       
         $access_token = $this->accessToken();
 
         $order_id = $request->query('token');
@@ -151,19 +152,80 @@ class PayPalController extends Controller
          $response = curl_exec($curl); 
          $curl = curl_close($curl);
          $json = json_decode($response, true);
-        //  dump($json);
         
 
-            //Payment table fields
-            foreach($json["purchase_units"] as $keys => $item)
+         //payment table fields
+         $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
+         $payer_id = ($json["payer"]["payer_id"]);
+         $user_id = rand(1,10);
+         $payer_email = ($json["payer"]["email_address"]);
+         $payment_status = ($json["status"]);
+         $amount = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"]);
+         $currency = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["currency_code"]);
+
+         Payment::create([
+            'payment_id' => $payment_id,
+            'payer_id' => $payer_id,
+            'user_id' => $user_id,
+            'payer_email' => $payer_email,
+            'payment_status' => $payment_status,
+            'amount' => $amount,
+            'currency' => $currency,
+        ]);
+
+        if(Cookie::get('shopping_cart'))
+        {
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            $item_id = array_column($cart_data, 'item_id');
+            $quantity = array_column($cart_data, 'item_quantity');
+
+            //Calculating total with item quantity and item price
+            $total = 0;
+            foreach($cart_data as $cart)
             {
-                //payment_id
-                $payment_id = $item["payments"]["captures"][0]["id"];  
-                //  
+                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
             }
+        }
+
+        //shipping address
+        $address_line_1 = $json["purchase_units"][0]["shipping"]["address"]["address_line_1"];
+        $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
+        $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
+
+        $order_id = $json["id"];
+        $product_id = $item_id;
+        $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
+        $shipping_address = $address_line_1.", ".$admin_area_2.", ".$admin_area_1;
+        $sub_total = $total;
+        $payment_type = "Paypal";
+
+
         
 
-         
+        Orders::create([
+            'order_id' => $order_id,
+            'user_id' => $user_id,
+            'product_id' => $product_id[0],
+            'name' => $name,
+            'shipping_address' => $shipping_address,
+            'quantity' => $quantity[0],
+            'sub_total' => $sub_total,
+            'payment_type' => $payment_type,
+        ]);
+
+        dump($json);
+        // // dump($order_id."\n".$product_id."\n".$user_id."\n".$name."\n".$shipping_address."\n".$quantity."\n".$sub_total."\n".$payment_type);
+        // dump($product_id[0]);
+        // dump($user_id);
+        // dump($name);
+        // dump($shipping_address);
+        // dump($quantity[0]);
+        // dump($sub_total);
+        // dump($payment_type);
+
+    
+        
 
         // return view('store.payment.success')->with($url);
         
