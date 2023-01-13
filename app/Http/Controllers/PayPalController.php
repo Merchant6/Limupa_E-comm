@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Orders;
 use App\Models\Payment;
+use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\Mime\Encoder\Base64Encoder;
@@ -214,20 +215,15 @@ class PayPalController extends Controller
             'payment_type' => $payment_type,
         ]);
 
+        $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
+        $final_quantity = (int)$product_quantity - (int)$quantity;
+        Products::whereId($item_id)->update(['quantity' => $final_quantity]);
         dump($json);
-        // // dump($order_id."\n".$product_id."\n".$user_id."\n".$name."\n".$shipping_address."\n".$quantity."\n".$sub_total."\n".$payment_type);
-        // dump($product_id[0]);
-        // dump($user_id);
-        // dump($name);
-        // dump($shipping_address);
-        // dump($quantity[0]);
-        // dump($sub_total);
-        // dump($payment_type);
+        dump($final_quantity);
+        $cookieValue = "";
+        Cookie::queue(Cookie::make('shopping_cart', $cookieValue, time()-3600)); 
 
-    
-        
-
-        // return view('store.payment.success')->with($url);
+        return redirect(route('cart'));
         
     }
 
