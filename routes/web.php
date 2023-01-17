@@ -46,7 +46,8 @@ Route::post('update-cart-data',[CartController::class, 'updateCartData'])->name(
 
 //Paypal 
 Route::post('payment', [PayPalController::class, 'payment'])->name('payment');
-Route::get('token', [PayPalController::class, 'token'])->name('token');
+Route::get('shopping',[PayPalController::class, 'getShop'])->name('shopping');
+
 
 // Route::get('cancel', 'PayPalController')->name('payment.cancel');
 Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success');
@@ -96,3 +97,6 @@ Route::group(['middleware' => ['guest:admin']], function() {
           Route::get('search',[ProductController::class, 'search'])->name('search');
 
    });
+
+
+  

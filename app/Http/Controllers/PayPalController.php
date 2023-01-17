@@ -47,6 +47,8 @@ class PayPalController extends Controller
         return $access_token;
     }
    
+
+    
         
     public function payment()
     {
@@ -121,9 +123,8 @@ class PayPalController extends Controller
                 $response = curl_exec($curl); 
                 $curl = curl_close($curl);
                 $json2 = json_decode($response);
-                dump($json2);
+                // dump($json2);
                 $order_id = $json2->id;
-                // dump($order_id);
                 return redirect("https://www.sandbox.paypal.com/checkoutnow?token=".$order_id);
         
             
@@ -140,11 +141,10 @@ class PayPalController extends Controller
 
         $order_id = $request->query('token');
         $payer_id = $request->query('PayerID');
-        // $url = $order_id." ".$payer_id;
 
         $curl = curl_init();
 
-         //Authorizing the payment
+         //Paypal Checkout
          curl_setopt($curl, CURLOPT_URL, "https://api.sandbox.paypal.com/v2/checkout/orders/".$order_id."/capture");
          curl_setopt($curl, CURLOPT_POST, true);
          curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -155,7 +155,7 @@ class PayPalController extends Controller
          $json = json_decode($response, true);
         
 
-         //payment table fields
+         //Payment Data
          $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
          $payer_id = ($json["payer"]["payer_id"]);
          $user_id = rand(1,10);
@@ -194,6 +194,7 @@ class PayPalController extends Controller
         $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
         $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
 
+        //Order Data
         $order_id = $json["id"];
         $product_id = $item_id;
         $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
@@ -215,16 +216,45 @@ class PayPalController extends Controller
             'payment_type' => $payment_type,
         ]);
 
+        
         $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
         $final_quantity = (int)$product_quantity - (int)$quantity;
         Products::whereId($item_id)->update(['quantity' => $final_quantity]);
+        setcookie('shopping_cart', NULL, time()-3600);
         dump($json);
         dump($final_quantity);
-        $cookieValue = "";
-        Cookie::queue(Cookie::make('shopping_cart', $cookieValue, time()-3600)); 
+        
 
         return redirect(route('cart'));
         
+    }
+
+    public function shopping()
+    {   
+        
+            // $arr = [];
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            $item_id = array_column($cart_data, 'item_id');
+            $quantity = array_column($cart_data, 'item_quantity');
+
+            //Calculating total with item quantity and item price
+            $total = 0;
+            foreach($cart_data as $cart)
+            {
+                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
+            }
+
+            
+            $this->getShop($item_id);
+        
+           
+
+    }
+
+    public function getShop($item_id)
+    {
+        dump($item_id);
     }
 
 
