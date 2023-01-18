@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -106,7 +108,24 @@ class UserController extends Controller
             
             
     
-    }  
+    }
+    
+    public function getDetails()
+    {
+        $order =  (User::query()
+        ->where('id',rand(1,4))
+        ->with(['orders' => function($q)
+        {
+            $q->select('id', 'user_id', 'order_id', 'quantity', 'sub_total');
+        }])
+        ->with(['payments' => function($q)
+        {
+            $q->select('id', 'user_id', 'payment_id', 'payment_status');
+        }])
+        ->get(['id', 'username', 'email', 'pnum']));
+
+        return  $order;
+    }
 
 
 

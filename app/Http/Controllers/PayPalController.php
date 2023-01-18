@@ -235,9 +235,6 @@ class PayPalController extends Controller
                 'payment_type' => $payment_type,
             ]);
 
-            //Commiting the transaction
-            Db::commit();
-            
             //Deducting quantity from products table after successfull payment
             $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
             $final_quantity = (int)$product_quantity - (int)$quantity;
@@ -245,7 +242,13 @@ class PayPalController extends Controller
 
             //Resetting cookie after payment
             setcookie('shopping_cart', NULL, time()-3600);
-            return redirect(route('cart'));
+
+            //Commiting the transaction
+            DB::commit();
+
+            
+            // return redirect(route('cart'));
+            dump($json);
 
         }
         catch(\Exception $e)

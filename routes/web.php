@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//getDetails
+Route::get('get.details', [UserController::class, 'getDetails'])->name('get.details');
 
 //Dashboard
 Route::get('store',[StoreController::class, 'index'])->name('store');
@@ -46,7 +48,7 @@ Route::post('update-cart-data',[CartController::class, 'updateCartData'])->name(
 
 //Paypal 
 Route::post('payment', [PayPalController::class, 'payment'])->name('payment');
-Route::get('shopping',[PayPalController::class, 'getShop'])->name('shopping');
+
 
 
 // Route::get('cancel', 'PayPalController')->name('payment.cancel');
