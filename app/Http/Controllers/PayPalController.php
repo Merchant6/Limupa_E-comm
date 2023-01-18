@@ -11,7 +11,25 @@ use Symfony\Component\Mime\Encoder\Base64Encoder;
 
 class PayPalController extends Controller
 {
+    //Getting Cookie data.
+    public function shopping()
+    {   
+            $cookie = stripslashes(Cookie::get('shopping_cart'));
+            $cookie_cart = json_decode($cookie, true);
+            $i_id = array_column($cookie_cart, 'item_id');
+            $cookie_quantity = array_column($cookie_cart, 'item_quantity');
 
+            //Calculating total with item quantity and item price
+            $total = 0;
+            foreach($cookie_cart  as $cart)
+            {
+                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
+            }
+            $arr = [$cookie, $cookie_cart ,$i_id, $cookie_quantity, $total];
+            return $arr;
+    }
+
+    //Getting access token
     public function accessToken()
     {
         $access_token = "";
@@ -49,27 +67,23 @@ class PayPalController extends Controller
    
 
     
-        
+    //Creating the order
     public function payment()
     {
-        
+
+        //Getting access token
         $access_token = $this->accessToken();
 
         //Checking Cookie exists
         $cookie = Cookie::get('shopping_cart');
         if($cookie)
         {
-            //Getting and decoding the cookie data 
-            $cookie_data = stripslashes($cookie);
-            $cart_data = json_decode($cookie_data, true);
-            
-            //Calculating total with item quantity and item price
-            $total = 0;
-            foreach($cart_data as $cart)
-            {
-                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
-            }
-            
+            $arr = $this->shopping();
+            $cookie_data = $arr[0];
+            $cart_data = $arr[1];
+            $item_id = $arr[2];
+            $quantity = $arr[3];
+            $total = $arr[4];
             
             //Setting up data for Payment
             $curl = curl_init();
@@ -123,7 +137,6 @@ class PayPalController extends Controller
                 $response = curl_exec($curl); 
                 $curl = curl_close($curl);
                 $json2 = json_decode($response);
-                // dump($json2);
                 $order_id = $json2->id;
                 return redirect("https://www.sandbox.paypal.com/checkoutnow?token=".$order_id);
         
@@ -133,8 +146,10 @@ class PayPalController extends Controller
 
     }
 
+   
+
   
-    //Getting Order ID and Payer ID through url query
+    //Getting Order ID and Payer ID through url query & Capturing Payment
     public function success(Request $request)
     {
         $access_token = $this->accessToken();
@@ -155,7 +170,7 @@ class PayPalController extends Controller
          $json = json_decode($response, true);
         
 
-         //Payment Data
+         //Payment Data from response
          $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
          $payer_id = ($json["payer"]["payer_id"]);
          $user_id = rand(1,10);
@@ -164,7 +179,34 @@ class PayPalController extends Controller
          $amount = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"]);
          $currency = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["currency_code"]);
 
-         Payment::create([
+        //Checking cookie exists
+        if(Cookie::get('shopping_cart'))
+        {
+            $arr = $this->shopping();
+            $cookie_data = $arr[0];
+            $cart_data = $arr[1];
+            $item_id = $arr[2];
+            $quantity = $arr[3];
+            $total = $arr[4];
+
+        }
+
+        //Concatinating shipping address from response
+        $address_line_1 = $json["purchase_units"][0]["shipping"]["address"]["address_line_1"];
+        $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
+        $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
+
+        //Getting order data from response
+        $order_id = $json["id"];
+        $product_id = $item_id;
+        $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
+        $shipping_address = $address_line_1.", ".$admin_area_2.", ".$admin_area_1;
+        $sub_total = $total;
+        $payment_type = "Paypal";
+
+
+        //Inserting data to payment table
+        Payment::create([
             'payment_id' => $payment_id,
             'payer_id' => $payer_id,
             'user_id' => $user_id,
@@ -174,37 +216,7 @@ class PayPalController extends Controller
             'currency' => $currency,
         ]);
 
-        if(Cookie::get('shopping_cart'))
-        {
-            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-            $cart_data = json_decode($cookie_data, true);
-            $item_id = array_column($cart_data, 'item_id');
-            $quantity = array_column($cart_data, 'item_quantity');
-
-            //Calculating total with item quantity and item price
-            $total = 0;
-            foreach($cart_data as $cart)
-            {
-                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
-            }
-        }
-
-        //shipping address
-        $address_line_1 = $json["purchase_units"][0]["shipping"]["address"]["address_line_1"];
-        $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
-        $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
-
-        //Order Data
-        $order_id = $json["id"];
-        $product_id = $item_id;
-        $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
-        $shipping_address = $address_line_1.", ".$admin_area_2.", ".$admin_area_1;
-        $sub_total = $total;
-        $payment_type = "Paypal";
-
-
-        
-
+        //Inserting data to order table
         Orders::create([
             'order_id' => $order_id,
             'user_id' => $user_id,
@@ -216,45 +228,15 @@ class PayPalController extends Controller
             'payment_type' => $payment_type,
         ]);
 
-        
+        //Deducting quantity from products table after successfull payment
         $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
         $final_quantity = (int)$product_quantity - (int)$quantity;
         Products::whereId($item_id)->update(['quantity' => $final_quantity]);
-        setcookie('shopping_cart', NULL, time()-3600);
-        dump($json);
-        dump($final_quantity);
-        
 
+        //Resetting cookie after payment
+        setcookie('shopping_cart', NULL, time()-3600);
         return redirect(route('cart'));
         
-    }
-
-    public function shopping()
-    {   
-        
-            // $arr = [];
-            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
-            $cart_data = json_decode($cookie_data, true);
-            $item_id = array_column($cart_data, 'item_id');
-            $quantity = array_column($cart_data, 'item_quantity');
-
-            //Calculating total with item quantity and item price
-            $total = 0;
-            foreach($cart_data as $cart)
-            {
-                $total+= ($cart["item_quantity"] * $cart["item_price"]);   
-            }
-
-            
-            $this->getShop($item_id);
-        
-           
-
-    }
-
-    public function getShop($item_id)
-    {
-        dump($item_id);
     }
 
 
