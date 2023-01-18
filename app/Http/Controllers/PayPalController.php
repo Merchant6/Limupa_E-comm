@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Mime\Encoder\Base64Encoder;
 
 class PayPalController extends Controller
@@ -205,37 +206,63 @@ class PayPalController extends Controller
         $payment_type = "Paypal";
 
 
-        //Inserting data to payment table
-        Payment::create([
-            'payment_id' => $payment_id,
-            'payer_id' => $payer_id,
-            'user_id' => $user_id,
-            'payer_email' => $payer_email,
-            'payment_status' => $payment_status,
-            'amount' => $amount,
-            'currency' => $currency,
-        ]);
 
-        //Inserting data to order table
-        Orders::create([
-            'order_id' => $order_id,
-            'user_id' => $user_id,
-            'product_id' => $product_id[0],
-            'name' => $name,
-            'shipping_address' => $shipping_address,
-            'quantity' => $quantity[0],
-            'sub_total' => $sub_total,
-            'payment_type' => $payment_type,
-        ]);
+        //opening a try catch block
+        try
+        {
+            //Begin Transaction
+            DB::beginTransaction();
+            //Inserting data to payment table
+            Payment::create([
+                'payment_id' => $payment_id,
+                'payer_id' => $payer_id,
+                'user_id' => $user_id,
+                'payer_email' => $payer_email,
+                'payment_status' => $payment_status,
+                'amount' => $amount,
+                'currency' => $currency,
+            ]);
 
-        //Deducting quantity from products table after successfull payment
-        $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
-        $final_quantity = (int)$product_quantity - (int)$quantity;
-        Products::whereId($item_id)->update(['quantity' => $final_quantity]);
+            //Inserting data to order table
+            Orders::create([
+                'order_id' => $order_id,
+                'user_id' => $user_id,
+                'product_id' => $product_id[0],
+                'name' => $name,
+                'shipping_address' => $shipping_address,
+                'quantity' => $quantity[0],
+                'sub_total' => $sub_total,
+                'payment_type' => $payment_type,
+            ]);
 
-        //Resetting cookie after payment
-        setcookie('shopping_cart', NULL, time()-3600);
-        return redirect(route('cart'));
+            //Commiting the transaction
+            Db::commit();
+            
+            //Deducting quantity from products table after successfull payment
+            $product_quantity = Products::query()->select(['quantity'])->where('id', '=', $item_id)->value('quantity');
+            $final_quantity = (int)$product_quantity - (int)$quantity;
+            Products::whereId($item_id)->update(['quantity' => $final_quantity]);
+
+            //Resetting cookie after payment
+            setcookie('shopping_cart', NULL, time()-3600);
+            return redirect(route('cart'));
+
+        }
+        catch(\Exception $e)
+        {
+            //If exception is thrown, rollback the changes
+            DB::rollBack();
+
+            //redirdcting to some route
+            return redirect(route('store'));
+
+        }
+
+        
+
+        
+
+        
         
     }
 
