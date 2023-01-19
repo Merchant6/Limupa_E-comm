@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Exception;
 use App\Models\Admin;
+use App\Models\Orders;
+use App\Models\Products;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +22,14 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        return view('admin.home.dashboard');
+        $products = Products::count('id');
+        $users = User::count('id');
+        $orders = Orders::count('id');
+        $revenue = Orders::sum('sub_total');
+        
+        $arr = [$products, $users, $orders, $revenue];
+        // dump($arr);
+        return view('admin.home.dashboard', compact('arr'));
     }
 
     

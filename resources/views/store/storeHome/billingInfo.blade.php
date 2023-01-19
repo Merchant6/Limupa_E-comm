@@ -17,14 +17,19 @@
     </section>
 
     <section class="checkout_area section_gap">
-        <div class="container">
+            @if(session()->has('exception'))
+                <div class="text-center p-3 mx-3 my-3" id="payment-error">
+                    <h3 class="text-danger">{{ session()->get('exception') }}<h3>
+                </div>
+            @endif 
+
             
-           
+        <div class="container">
             <div class="billing_details">
                 <div class="row">
                     <div class="col-lg-8">
                         <h3>Billing Details</h3>
-                        
+                        <form action="" class="row contact_form">
                             <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="fname" name="fname">
                                 <span class="placeholder" data-placeholder="First name"></span>
@@ -76,6 +81,7 @@
                                     </ul>
                                     </div>
                             </div>
+                        </form>    
                             <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="cc_month" name="cc_month">
                                 <span class="placeholder" data-placeholder="CC Month"></span>
@@ -94,11 +100,12 @@
                             <div class="col-md-12 form-group p_star">
                                
                             </div>  
+                            
 
                             <form class="row contact_form" action="{{route('payment')}}" method="post" novalidate="novalidate">
                                 @csrf
                                 <div class="col-md-6 form-group p_star">
-                                    <button type="submit" class="primary-btn rounded">Pay through Paypal</button>
+                                    <button type="submit" class="primary-btn rounded" data-toggle="modal" data-target="#exampleModalCenter">Pay through Paypal</button>
                                 
                                 </div>
                             
@@ -149,62 +156,30 @@
         </div>
         
     </section>
-    <script src="https://www.paypal.com/sdk/js?client-id=AdzTwO-HHkF8SkGgKHUCWrtCfvgi4JHg-856M8UVGApoc_Ye0Q3EWZFrtGFZs3LgFZQ1-YpeecFLOLcJ&currency=USD"></script>
-    <script>
-            total = document.getElementById('total').innerHTML 
-            console.log(total)
-            paypal.Buttons({
-    
-            // Sets up the transaction when a payment button is clicked
-    
-            createOrder: (data, actions) => {
-    
-                return actions.order.create({
-    
-                purchase_units: [{
-    
-                    amount: {
-    
-                    value: document.getElementById('total').innerHTML  // Can also reference a variable or function
-    
-                    }
-    
-                }]
-    
-                });
-    
-            },
 
-            
-            
-    
-            // Finalize the transaction after payer approval
-    
-            onApprove: (data, actions) => {
-    
-                return actions.order.capture().then(function(orderData) {
-    
-                // Successful capture! For dev/demo purposes:
-    
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-    
-                const transaction = orderData.purchase_units[0].payments.captures[0];
-    
-                alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-    
-                // When ready to go live, remove the alert and show a success message within this page. For example:
-    
-                // const element = document.getElementById('paypal-button-container');
-    
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-    
-                // Or go to another URL:  actions.redirect('thank_you.html');
-    
-                });
-    
-            }
-    
-            }).render('#paypal-button-container');
-  
-      </script>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        
+        <div class="modal-body p-5">
+            <h3 class="text-center p-5">
+                Processing, please wait...
+            </h3>
+        </div>
+        
+      </div>
+    </div>
+</div>
+   
+
+  <script>
+    $(function() {
+    setTimeout(
+        function() 
+        { $("#payment-error").fadeOut(1500); }, 
+        5000)
+
+    })
+</script>
 @endsection

@@ -153,86 +153,119 @@ class PayPalController extends Controller
     //Getting Order ID and Payer ID through url query & Capturing Payment
     public function success(Request $request)
     {
-        $access_token = $this->accessToken();
 
-        $order_id = $request->query('token');
-        $payer_id = $request->query('PayerID');
-
-        $curl = curl_init();
-
-         //Paypal Checkout
-         curl_setopt($curl, CURLOPT_URL, "https://api.sandbox.paypal.com/v2/checkout/orders/".$order_id."/capture");
-         curl_setopt($curl, CURLOPT_POST, true);
-         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-         curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json","Authorization: Bearer ".$access_token));
-         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-         $response = curl_exec($curl); 
-         $curl = curl_close($curl);
-         $json = json_decode($response, true);
-        
-
-         //Payment Data from response
-         $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
-         $payer_id = ($json["payer"]["payer_id"]);
-         $user_id = rand(1,10);
-         $payer_email = ($json["payer"]["email_address"]);
-         $payment_status = ($json["status"]);
-         $amount = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"]);
-         $currency = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["currency_code"]);
-
-        //Checking cookie exists
-        if(Cookie::get('shopping_cart'))
-        {
-            $arr = $this->shopping();
-            $cookie_data = $arr[0];
-            $cart_data = $arr[1];
-            $item_id = $arr[2];
-            $quantity = $arr[3];
-            $total = $arr[4];
-
-        }
-
-        //Concatinating shipping address from response
-        $address_line_1 = $json["purchase_units"][0]["shipping"]["address"]["address_line_1"];
-        $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
-        $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
-
-        //Getting order data from response
-        $order_id = $json["id"];
-        $product_id = $item_id;
-        $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
-        $shipping_address = $address_line_1.", ".$admin_area_2.", ".$admin_area_1;
-        $sub_total = $total;
-        $payment_type = "Paypal";
-
-
-
-        //opening a try catch block
         try
         {
+            $access_token = $this->accessToken();
+
+            $order_id = $request->query('token');
+            $payer_id = $request->query('PayerID');
+
+            $curl = curl_init();
+
+            //Paypal Checkout
+            curl_setopt($curl, CURLOPT_URL, "https://api.sandbox.paypal.com/v2/checkout/orders/".$order_id."/capture");
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array("Content-Type: application/json","Authorization: Bearer ".$access_token));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+            $response = curl_exec($curl); 
+            $curl = curl_close($curl);
+            $json = json_decode($response, true);
+            
+
+            //Payment Data from response
+            $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
+            $payer_id = ($json["payer"]["payer_id"]);
+            $user_id = rand(1,10);
+            $payer_email = ($json["payer"]["email_address"]);
+            $payment_status = ($json["status"]);
+            $amount = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"]);
+            $currency = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["currency_code"]);
+
+            //Checking cookie exists
+            if(Cookie::get('shopping_cart'))
+            {
+                $arr = $this->shopping();
+                $cookie_data = $arr[0];
+                $cart_data = $arr[1];
+                $item_id = $arr[2];
+                $quantity = $arr[3];
+                $total = $arr[4];
+
+            }
+
+            //Concatinating shipping address from response
+            $address_line_1 = $json["purchase_units"][0]["shipping"]["address"]["address_line_1"];
+            $admin_area_2 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_2"];
+            $admin_area_1 = $json["purchase_units"][0]["shipping"]["address"]["admin_area_1"];
+
+            //Getting order data from response
+            $order_id = $json["id"];
+            $product_id = $item_id;
+            $name = $json["purchase_units"][0]["shipping"]["name"]["full_name"];
+            $shipping_address = $address_line_1.", ".$admin_area_2.", ".$admin_area_1;
+            $sub_total = $total;
+            $payment_type = "Paypal";
+
+            //Creating array to pass them as arguments for $this->transaction()
+            $payment_arr = [$payment_id, $payer_id, $user_id, $payer_email, $payment_status, $amount, $currency];
+            $order_arr = [$order_id, $user_id, $product_id, $name, $shipping_address, $quantity, $sub_total, $payment_type];
+
+            //opening try catch block for db transaction
+            try
+            {
+                //calling transaction()
+                $this->transaction($payment_arr, $order_arr, $item_id, $quantity);
+                return redirect(route('cart'));
+            }
+            catch(\Exception $e)
+            {
+                //If exception is thrown, rollback the changes
+                DB::rollBack();
+
+                //redirdcting to some route
+                return redirect(route('checkout'))->with('exception', 'Something went wrong.');
+
+            }
+        }
+
+        catch(\Exception $e)
+        {
+            return redirect(route('checkout'))->with('exception', 'There was a problem processing your payment, please try later.');
+        } 
+        
+    }
+
+
+    //Creating a database transaction for creating order and payment data
+    public function transaction($payment_arr, $order_arr, $item_id, $quantity)
+    {
+
+        
             //Begin Transaction
             DB::beginTransaction();
             //Inserting data to payment table
             Payment::create([
-                'payment_id' => $payment_id,
-                'payer_id' => $payer_id,
-                'user_id' => $user_id,
-                'payer_email' => $payer_email,
-                'payment_status' => $payment_status,
-                'amount' => $amount,
-                'currency' => $currency,
+                'payment_id' => $payment_arr[0],
+                'payer_id' => $payment_arr[1],
+                'user_id' => $payment_arr[2],
+                'payer_email' => $payment_arr[3],
+                'payment_status' => $payment_arr[4],
+                'amount' => $payment_arr[5],
+                'currency' => $payment_arr[5],
             ]);
 
             //Inserting data to order table
             Orders::create([
-                'order_id' => $order_id,
-                'user_id' => $user_id,
-                'product_id' => $product_id[0],
-                'name' => $name,
-                'shipping_address' => $shipping_address,
-                'quantity' => $quantity[0],
-                'sub_total' => $sub_total,
-                'payment_type' => $payment_type,
+                'order_id' => $order_arr[0],
+                'user_id' => $order_arr[1],
+                'product_id' => $order_arr[2][0],
+                'name' => $order_arr[3],
+                'shipping_address' => $order_arr[4],
+                'quantity' => $order_arr[5][0],
+                'sub_total' => $order_arr[6],
+                'payment_type' => $order_arr[7],
             ]);
 
             //Deducting quantity from products table after successfull payment
@@ -245,28 +278,6 @@ class PayPalController extends Controller
 
             //Commiting the transaction
             DB::commit();
-
-            
-            // return redirect(route('cart'));
-            dump($json);
-
-        }
-        catch(\Exception $e)
-        {
-            //If exception is thrown, rollback the changes
-            DB::rollBack();
-
-            //redirdcting to some route
-            return redirect(route('store'));
-
-        }
-
-        
-
-        
-
-        
-        
     }
 
 
