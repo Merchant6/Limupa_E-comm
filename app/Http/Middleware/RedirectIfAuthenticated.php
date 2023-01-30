@@ -26,12 +26,15 @@ class RedirectIfAuthenticated
 
             if($guard == 'admin') 
             {
-                 return redirect()->route('dashboard');
+                 return redirect()->to(route('dashboard'));
             }
+            if($guard == 'web') 
+            {
+                 return redirect()->route('store');
+            }        
             
          }
     
         return $next($request);
-        // return redirect('login');
     }
 }

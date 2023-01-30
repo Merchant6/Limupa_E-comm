@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -85,8 +84,8 @@ class UserController extends Controller
          Validator::make($requestData,
         [
         
-        'username' => 'required|min:5|max:20',
-        'password' => 'required|min:8',
+        'username' => 'string|required|min:5|max:20',
+        'password' => 'string|required|min:8',
         
         ]
         
@@ -125,6 +124,22 @@ class UserController extends Controller
         ->get(['id', 'username', 'email', 'pnum']));
 
         return  $order;
+    }
+
+    public function UserSignOut() 
+    {
+
+        try{
+        Session::flush();
+        Auth::logout();
+        
+        return redirect('store');
+        }
+
+        catch(\Exception $e)
+        {
+            dump($e->getMessage());
+        }
     }
 
 

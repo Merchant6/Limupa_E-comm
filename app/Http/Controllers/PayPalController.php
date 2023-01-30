@@ -212,12 +212,13 @@ class PayPalController extends Controller
             $payment_arr = [$payment_id, $payer_id, $user_id, $payer_email, $payment_status, $amount, $currency];
             $order_arr = [$order_id, $user_id, $product_id, $name, $shipping_address, $quantity, $sub_total, $payment_type];
 
+
             //opening try catch block for db transaction
             try
             {
                 //calling transaction()
                 $this->transaction($payment_arr, $order_arr, $item_id, $quantity);
-                return redirect(route('cart'));
+                return redirect(route('cart'))->with('success', 'Thank you for shopping with us.');
             }
             catch(\Exception $e)
             {
@@ -228,6 +229,7 @@ class PayPalController extends Controller
                 return redirect(route('checkout'))->with('exception', 'Something went wrong.');
 
             }
+            
         }
 
         catch(\Exception $e)

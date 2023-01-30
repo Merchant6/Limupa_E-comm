@@ -137,8 +137,12 @@
             <div class="row">
                 <div class="col-md-12 mycard py-5 text-center">
                     <div>
+                        @if(session()->has('success'))
+                            <h2>{{ session()->get('success') }}</h2>
+                        @else
                         <h2>Your cart is currently empty.</h2>
                         <br>
+                        @endif
                         <a class="primary-btn" href="/store">Back To Shopping</a>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class adminAuth
+class userAuth
 {
     /**
      * Handle an incoming request.
@@ -17,22 +17,14 @@ class adminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        $isAuthenticatedAdmin = Auth::guard('admin')->check();
-        
-
-        //This will be excecuted if the new authentication fails.
-        if (!$isAuthenticatedAdmin){
+        $isAuthenticatedUser = Auth::guard('web')->check();
+        if (!$isAuthenticatedUser){
 
             
-            return redirect()->route('login');
+            return redirect()->route('store');
             
         }
-        
-        
-        
-            return $next($request);
-        
-        
-        
+
+        return $next($request);
     }
 }

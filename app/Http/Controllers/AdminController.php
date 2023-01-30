@@ -19,6 +19,7 @@ class AdminController extends Controller
 {
 
     
+    
 
     public function dashboard()
     {
@@ -50,9 +51,9 @@ class AdminController extends Controller
 
             $remember = ( !empty( $request->remember ) ) ? TRUE : FALSE;
             $credentials = $request->only(['email', 'password'], $remember);
-            
+        
             //Check Email and Password from Request
-            if(Auth::guard('admin')->attempt($credentials, $remember)) 
+            if(Auth::guard('admin')->attempt($credentials, $remember))
             {
 
                 //redirect to Dashboard
@@ -61,6 +62,7 @@ class AdminController extends Controller
             }
       
             return redirect()->back()->with('error', "Email or Password not found"); 
+            
             
             
     
@@ -97,12 +99,6 @@ class AdminController extends Controller
 
            
 
-            
-                
-            
-            
-            
-            
             public function signOut() 
             {
                 Session::flush();

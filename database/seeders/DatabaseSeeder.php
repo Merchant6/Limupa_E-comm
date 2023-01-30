@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         // }
 
         User::factory(10)->create();
-        Products::factory(10)->create(); 
+        // Products::factory(10)->create(); 
         // Reviews::factory(50)->create();
 
         // $faker = Faker::create();

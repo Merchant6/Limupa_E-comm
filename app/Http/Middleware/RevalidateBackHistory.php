@@ -4,9 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class adminAuth
+class RevalidateBackHistory
 {
     /**
      * Handle an incoming request.
@@ -17,22 +16,11 @@ class adminAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        $isAuthenticatedAdmin = Auth::guard('admin')->check();
-        
-
-        //This will be excecuted if the new authentication fails.
-        if (!$isAuthenticatedAdmin){
-
-            
-            return redirect()->route('login');
-            
-        }
-        
-        
-        
-            return $next($request);
-        
-        
-        
+        $response = $next($request);
+        $response->headers->set('Cache-Control','no-cache, no-store, max-age=0, must-revalidate');
+        $response->headers->set('Cache-Control: post-check=0, pre-check=0', false);
+        $response->headers->set('Pragma','no-cache');
+        $response->headers->set('Expires','Sun, 02 Jan 1990 00:00:00 GMT');
+        return $response;
     }
 }

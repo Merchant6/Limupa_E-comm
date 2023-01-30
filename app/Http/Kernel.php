@@ -21,6 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\RevalidateBackHistory::class,
     ];
 
     /**
@@ -64,6 +65,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adminAuth' => \App\Http\Middleware\adminAuth::class, //Registering New Middleware
-        'paypal' => \App\Http\Middleware\Paypal::class
+        'paypal' => \App\Http\Middleware\Paypal::class,
+        'revalidate' => \App\Http\Middleware\RevalidateBackHistory::class,
+        'userAuth' => \App\Http\Middleware\userAuth::class,
     ];
 }

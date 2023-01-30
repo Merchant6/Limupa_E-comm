@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'lname' => fake()->lastName,
             'email' => fake()->safeEmail(),
             'pnum' => $pnum.$fakenNum,
-            'password' => Hash::make(Str::random(8)), // password
+            'password' => Hash::make('1qw23er45t'), // password
             'remember_token' => Str::random(10),
             'created_at' => fake()->dateTime(),
             'updated_at' => fake()->dateTime(),
