@@ -39,14 +39,13 @@ Route::group(['middleware' => 'revalidate'], function() {
     Route::group(['middleware' => ['userAuth']], function() {
 
         //Checkout
-        Route::get('checkout',[StoreController::class, 'checkOut'])->name('checkout');
+        Route::get('checkout',[StoreController::class, 'checkOut'])->name('checkout')->middleware('cart');
+        //Paypal 
+        Route::post('payment', [PayPalController::class, 'payment'])->name('payment')->middleware('cart');
+        Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success')->cart('cart');
 
         //Create Comment
         Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment');
-
-        //Paypal 
-        Route::post('payment', [PayPalController::class, 'payment'])->name('payment');
-        Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success');
 
         //getDetails
         Route::get('get.details', [UserController::class, 'getDetails'])->name('get.details');
