@@ -21,7 +21,7 @@
                 @if(Cookie::get('shopping_cart'))
                 @php $total= 0 @endphp
                 @php $btnCount = 0 @endphp
-                @php $subTotal = 0 @endphp
+                @php $st = 0 @endphp
                 
                     <div class="cart_inner">
                     <div class="table-responsive">
@@ -84,9 +84,9 @@
                                             </div>
                                         </td>
                                         
-                                        {{-- @php $subTotal++ @endphp --}}
-                                            <td id="totalAjax">
-                                                <h5 class="totalH5"> {{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
+                                            @php $st++ @endphp
+                                            <td id="totalAjax{{$st}}">
+                                                <h5 class="totalH5"> <span class="t">{{ ($data['item_price'] * $data['item_quantity'] ) }}</span></h5>
                                             </td>
 
                                         <td>

@@ -2,12 +2,6 @@
 
   // Update Cart Data
   $(document).ready(function () {
-
-        
-            var count  = $(".totalH5").length;
-            // console.log(count-2)   
-        
-            
                 $('.items-count').click(function (e) {
                     e.preventDefault();
         
@@ -33,11 +27,13 @@
                         type: 'POST',
                         data: data,
                         success: function (response) {
-        
-                            // console.log(response.gtprice)
-                            $('.totalh5').text(response.gtprice);
-                            
-                            
+                                
+                                var count = 0; 
+                                $('#totalAjax').each(function(){
+                                    $('.totalH5'+(count+1)).children().text(response.gtprice);
+                                    count = count + 1;
+                                });
+                                
                             if(quantity>0)
                             {
                                 alertify.set('notifier','position','bottom-right');

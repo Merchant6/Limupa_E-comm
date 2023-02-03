@@ -68,6 +68,6 @@ class Kernel extends HttpKernel
         'paypal' => \App\Http\Middleware\Paypal::class,
         'revalidate' => \App\Http\Middleware\RevalidateBackHistory::class,
         'userAuth' => \App\Http\Middleware\userAuth::class,
-        'cart' => \App\Http\Middleware\shoppingCart::class,
+        'cart_check' => \App\Http\Middleware\shoppingCart::class,
     ];
 }

@@ -108,11 +108,19 @@ class UserController extends Controller
             
     
     }
+
+    public function profile()
+    {
+        $user_order = $this->getDetails();
+        return view('store.storeHome.profile', compact('user_order'));
+    }
     
     public function getDetails()
     {
-        $order =  (User::query()
-        ->where('id',rand(1,4))
+        $user_id = Auth::user()->id;
+
+        $user_order =  (User::query()
+        ->where('id', $user_id)
         ->with(['orders' => function($q)
         {
             $q->select('id', 'user_id', 'order_id', 'quantity', 'sub_total');
@@ -121,25 +129,21 @@ class UserController extends Controller
         {
             $q->select('id', 'user_id', 'payment_id', 'payment_status');
         }])
-        ->get(['id', 'username', 'email', 'pnum']));
+        ->limit(10)->get(['id', 'fname', 'lname']));
 
-        return  $order;
+        return $user_order;
     }
 
     public function UserSignOut() 
     {
 
-        try{
+        
         Session::flush();
         Auth::logout();
         
         return redirect('store');
-        }
+        
 
-        catch(\Exception $e)
-        {
-            dump($e->getMessage());
-        }
     }
 
 

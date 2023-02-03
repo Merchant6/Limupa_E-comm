@@ -6,6 +6,7 @@ use App\Models\Orders;
 use App\Models\Payment;
 use App\Models\Products;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Mime\Encoder\Base64Encoder;
@@ -177,7 +178,7 @@ class PayPalController extends Controller
             //Payment Data from response
             $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
             $payer_id = ($json["payer"]["payer_id"]);
-            $user_id = rand(1,10);
+            $user_id = Auth::user()->id;
             $payer_email = ($json["payer"]["email_address"]);
             $payment_status = ($json["status"]);
             $amount = ($json["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"]);

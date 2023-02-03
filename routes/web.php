@@ -38,11 +38,13 @@ Route::group(['middleware' => 'revalidate'], function() {
     //Redirect if already authenticated middleware(Admin)
     Route::group(['middleware' => ['userAuth']], function() {
 
+        //Profile
+        Route::get('profile',[UserController::class, 'profile']); 
         //Checkout
-        Route::get('checkout',[StoreController::class, 'checkOut'])->name('checkout')->middleware('cart');
+        Route::get('checkout',[StoreController::class, 'checkOut'])->name('checkout')->middleware('cart_check');
         //Paypal 
-        Route::post('payment', [PayPalController::class, 'payment'])->name('payment')->middleware('cart');
-        Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success')->cart('cart');
+        Route::post('payment', [PayPalController::class, 'payment'])->name('payment')->middleware('cart_check');
+        Route::get('payment.success', [PayPalController::class, 'success'])->name('payment.success')->middleware('cart_check');
 
         //Create Comment
         Route::post('comments/{id}',[ReviewController::class, 'store'])->name('comment');
