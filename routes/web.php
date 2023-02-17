@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +56,8 @@ Route::group(['middleware' => 'revalidate'], function() {
         //UserSignOut
         Route::get('UserSignOut',[UserController::class, 'UserSignOut'])->name('UserSignOut');
 
+        //Update User
+        Route::post('update_user/{id}',[UserController::class, 'update'])->name('update_user');
 
     });
 
@@ -115,6 +118,12 @@ Route::group(['middleware' => 'revalidate'], function() {
 
               //Search Product
               Route::get('search',[ProductController::class, 'search'])->name('search');
+
+              //Orders
+              Route::get('view_orders',[OrderController::class, 'viewOrders'])->name('view_orders');
+
+              //Orders
+              Route::get('view_users',[UserController::class, 'viewUsers'])->name('view_users');
 
       });
 });

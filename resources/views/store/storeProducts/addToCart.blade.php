@@ -85,8 +85,8 @@
                                         </td>
                                         
                                             @php $st++ @endphp
-                                            <td id="totalAjax{{$st}}">
-                                                <h5 class="totalH5"> <span class="t">{{ ($data['item_price'] * $data['item_quantity'] ) }}</span></h5>
+                                            <td id="totalAjax">
+                                                <h5 class="totalH5" value="{{$st}}">{{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
                                             </td>
 
                                         <td>

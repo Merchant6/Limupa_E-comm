@@ -142,18 +142,9 @@ class ProductController extends Controller
     //Creating and Adding Products
     public function createProduct(Request $request)
     {  
-              
-                
-
-               
-                
-            
-
                 //Product Validation
                 $validation =  $this->productVerify($request);
-                
-               
-                
+                 
                 $data = $request->all();
                 $image_src = $this->validImg($request);
 
@@ -168,15 +159,7 @@ class ProductController extends Controller
                     'image_src' => $image_src
 
                 ]);
-              
-        
-
-               
-                 
-                
-
-       
-}
+    }
   
 
      /**
@@ -255,20 +238,7 @@ class ProductController extends Controller
                             'status' => 'success',
                             'data' => 'Product updated successfully.'
                         ],200);
-                    }
-                         
-                                  
-                                    
-                   
-                   
-                    
-
-                 
-               
-
-
-
-                             
+                    }                             
     }
 
     /**
@@ -289,8 +259,6 @@ class ProductController extends Controller
             $products->delete(); //for deleting record and file try both
     
         }
-
-        // $products->delete();
 
         return redirect('view_products')->with('error', 'Product successfully deleted');
     }

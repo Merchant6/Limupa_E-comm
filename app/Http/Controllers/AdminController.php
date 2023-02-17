@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DashboardData;
 use Exception;
 use App\Models\Admin;
 use App\Models\Orders;
@@ -10,8 +11,10 @@ use App\Models\Products;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 
 
 
@@ -23,12 +26,17 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $products = Products::count('id');
+        $products = (Products::count('id'));
         $users = User::count('id');
         $orders = Orders::count('id');
         $revenue = Orders::sum('sub_total');
-        
-        $arr = [$products, $users, $orders, $revenue];
+    
+        $data = [$products, $users, $orders, $revenue];
+
+        Cache::put('data', $data, 5);
+
+        $arr = Cache::get('data');
+
         // dump($arr);
         return view('admin.home.dashboard', compact('arr'));
     }

@@ -28,11 +28,14 @@
                         data: data,
                         success: function (response) {
                                 
-                                var count = 0; 
-                                $('#totalAjax').each(function(){
-                                    $('.totalH5'+(count+1)).children().text(response.gtprice);
-                                    count = count + 1;
-                                });
+                                    // $('.totalH5').text(response.gtprice); 
+                                    var h5 = $('.totalH5');
+                                    Array.from(h5).forEach(element => {
+                                        element.addEventListener('click', () => {
+                                          alert('totalH5 value is: ' + $(h5).attr('value'));
+                                        });
+                                      });
+                                   
                                 
                             if(quantity>0)
                             {
