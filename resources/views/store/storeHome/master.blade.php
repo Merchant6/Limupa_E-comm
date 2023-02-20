@@ -70,7 +70,7 @@
 									</li>
 								@else	
 								<li class="nav-item submenu dropdown my-auto">
-									<a href="/UserLogin" class="nav-link" aria-haspopup="true" aria-expanded="false"><span class="ti-user" style="font-size: 25px"></span></a>
+									<a href="/profile" class="nav-link" aria-haspopup="true" aria-expanded="false"><span class="ti-user" style="font-size: 25px"></span></a>
 								
 								</li>
 

@@ -97,6 +97,7 @@ class PayPalController extends Controller
                     "payer": 
                         {
                             "payment_method": "paypal"
+                            
                         },
                         
                         
@@ -114,7 +115,6 @@ class PayPalController extends Controller
                         
                                 }
 
-                           
                     
                             }
                 
@@ -173,8 +173,8 @@ class PayPalController extends Controller
             $response = curl_exec($curl); 
             $curl = curl_close($curl);
             $json = json_decode($response, true);
-            
-
+            dump($json);
+        
             //Payment Data from response
             $payment_id = ($json["purchase_units"][0]["payments"]["captures"][0]["id"]);
             $payer_id = ($json["payer"]["payer_id"]);

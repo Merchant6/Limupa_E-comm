@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <h3>Billing Details</h3>
-                        <form action="" class="row contact_form">
+                        {{-- <form action="" class="row contact_form">
                             <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="fname" name="fname">
                                 <span class="placeholder" data-placeholder="First name"></span>
@@ -81,31 +81,12 @@
                                     </ul>
                                     </div>
                             </div>
-                        </form>    
-                            <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="cc_month" name="cc_month">
-                                <span class="placeholder" data-placeholder="CC Month"></span>
-                            </div>
-                            <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="cc_year" name="cc_year">
-                                <span class="placeholder" data-placeholder="CC Year"></span>
-                            </div>
-                            <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="cvv" name="cvv">
-                                <span class="placeholder" data-placeholder="CVV"></span>
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                               
-                            </div>
-                            <div class="col-md-12 form-group p_star">
-                               
-                            </div>  
-                            
-
+                        </form>     --}}
                             <form class="row contact_form" action="{{route('payment')}}" method="post" novalidate="novalidate">
                                 @csrf
                                 <div class="col-md-6 form-group p_star">
-                                    <button type="submit" class="primary-btn rounded" data-toggle="modal" data-target="#exampleModalCenter">Pay through Paypal</button>
+                                    <button type="submit" class="primary-btn rounded" data-toggle="modal" data-target="#exampleModalCenter">Pay with <img class="img-fluid w-25" src="/paypal.png" alt=""></button>
+                                    
                                 
                                 </div>
                             
