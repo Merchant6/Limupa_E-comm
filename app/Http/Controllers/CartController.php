@@ -16,6 +16,7 @@ class CartController extends Controller
         $cart_data = json_decode($cookie_data, true);
        
         return view('store.storeProducts.addToCart')->with('cart_data', $cart_data);
+        
     }
 
 
@@ -146,5 +147,40 @@ class CartController extends Controller
                 }
             }
          }
+    }
+
+    public function delCartItem(Request $request)
+    {
+        $prod_id = $request->product_id;
+        //Checking if shopping_cart cookie already exists
+        if(Cookie::get('shopping_cart'))
+        {
+            $cookie_data = stripslashes(Cookie::get('shopping_cart'));
+            $cart_data = json_decode($cookie_data, true);
+            // Checking if a added product is already added to cart
+            $item_id_list = array_column($cart_data, 'item_id');
+            $p_id_exists = $prod_id;
+
+         if(in_array($p_id_exists, $item_id_list))
+         {
+            foreach($cart_data as $keys => $values )
+            {
+                if($cart_data[$keys]["item_id"] == $prod_id)
+                {
+                    unset($cart_data[$keys]);
+                    $item_data = json_encode($cart_data);
+                    $minutes = 60;
+                    Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
+                    // return response()->json(['status'=>" ".$cart_data[$keys]['item_name']." Already Added To Cart."]);
+                    return redirect(route('cart'));
+
+                }
+            }
+         }
+        }
+        else
+        {
+            return "Nothing to list";
+        }
     }
 }

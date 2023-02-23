@@ -53,14 +53,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <h5 id="price{{$btnCount}}">$ {{$data['item_price']}}</h5>
+                                            <h5 id="price{{$btnCount}}">$ <span class="product-price">{{$data['item_price']}}</span></h5>
                                         </td>
                                         <td>
 
                                             @php $btnCount++ @endphp
                                             <div class="product_count">
                                                 <input type="hidden" class="product_id" value="{{ $data['item_id'] }}">
-                                                <input type="text" name="qty" id="sst{{$btnCount}}" maxlength="12" value="{{$data['item_quantity']}}" title="Quantity:" class="input-text qty-input">
+                                                <input class="p-quantity" type="text" name="qty" id="sst{{$btnCount}}" maxlength="12" value="{{$data['item_quantity']}}" title="Quantity:" class="input-text qty-input">
                                                 
                                                 
                                                 <button 
@@ -85,8 +85,8 @@
                                         </td>
                                         
                                             @php $st++ @endphp
-                                            <td id="totalAjax">
-                                                <h5 class="totalH5" value="{{$st}}">{{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
+                                            <td class="totalAjax">
+                                                <h5 class="totalH5-{{$data['item_id']}}">{{ ($data['item_price'] * $data['item_quantity'] ) }}</h5>
                                             </td>
 
                                         <td>
@@ -104,7 +104,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><h4>Grand Total: ${{$total}} </h4></td>
+                                    <td><h4>Grand Total: <span class="grand-total">${{$total}}</span> </h4></td>
                                     <td></td>
                                     
                                  </tr>

@@ -35,7 +35,8 @@ Route::group(['middleware' => 'revalidate'], function() {
     Route::post('add-to-cart', [CartController::class, 'addToCart'])->name('add-to-cart');
     Route::get('load-cart-data',[CartController::class, 'cartLoadAjax'])->name('load-cart-data');
     Route::post('update-cart-data',[CartController::class, 'updateCartData'])->name('update-cart-data');
-
+    //delCartItem
+    Route::get('delCartItem',[CartController::class, 'delCartItem'])->name('delCartItem');
     //Redirect if already authenticated middleware(Admin)
     Route::group(['middleware' => ['userAuth']], function() {
 

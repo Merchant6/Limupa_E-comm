@@ -184,6 +184,7 @@ return [
         'Intervention\Image\ImageServiceProvider',
         Srmklive\PayPal\Providers\PayPalServiceProvider::class,
         
+        
         /*
          * Package Service Providers...
          */
