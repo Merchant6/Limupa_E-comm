@@ -111,6 +111,7 @@ class CartController extends Controller
 
     public function updateCartData(Request $request)
     {
+        
         //Getting Product Id and Quantity from Product Detail Page
         $p_id = $request->input('product_id');
         $quantity = $request->input('quantity');
@@ -141,12 +142,17 @@ class CartController extends Controller
                     Cookie::queue(Cookie::make('shopping_cart', $item_data, $minutes));
                     return response()->json([
                         'status'=>'"'.$cart_data[$keys]["item_name"].'" Quantity Updated',
-                        'gtprice' => ''.$gtprice.''
+                        'gtprice' => ''.$gtprice.'',
+                        
                     ]);
 
                 }
+
+                
             }
          }
+        
+        
     }
 
     public function delCartItem(Request $request)

@@ -18,7 +18,7 @@ $(document).ready(function () {
         });
 
         var totalH5 = $(`#totalH5-${product_id}`); // select totalH5 element for this product only
-
+        
         $.ajax({
             url: '/update-cart-data',
             type: 'POST',
@@ -26,21 +26,21 @@ $(document).ready(function () {
             success: function (response) {
 
                 totalH5.text(response.gtprice); // update totalH5 for this product only
+
+                total_price = 0;
+                $('.totalAjax').children().each(function(p)
+                {
+                    p = $(this).text();
+                    price = p.replace(',', '');
+                    total_price += Number(price); 
+                    console.log(price);
+                })
+                console.log(total_price);
+
+                $('.grand-total').text(total_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
                 
-                var data1 =(function()
-                            {
-                                price = $('.product-price').text();
-                                p_quantity = $('.p-quantity').val();
-                                console.log(price*p_quantity)  
-                                return {price, p_quantity}
-
-                            });
-
-                            var total_price =  $('.product-price').each(data1().price);
-                            var total_quantity = $('.p-quantity').each(data1().p_quantity);
-
-                            // $('.grand-total').text(total_price*total_quantity)
-
+                                
                 if(quantity > 0) {
                     alertify.set('notifier','position','bottom-right');
                     alertify.success(response.status);
@@ -50,7 +50,8 @@ $(document).ready(function () {
     });
 });
 
-  
+
+
 
 
 
